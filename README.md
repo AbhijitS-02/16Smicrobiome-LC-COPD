@@ -846,6 +846,6 @@ If you use this pipeline or its outputs, please cite the following tools:
 For questions, issues, or contributions, please [open an issue](../../issues) on this repository.
 
 ---
-
+*Results will be updated after publication*
 *Pipeline last updated: 2026-03-12*
 *QIIME2 version: 2024.10 | R version: 4.3+ | DADA2 parameters optimized via grid-search*
