@@ -136,14 +136,33 @@ Rscript scripts/install_r_packages.R
 
 This installs Bioconductor and CRAN packages including: `phyloseq`, `ANCOMBC`, `microbiomeMarker`, `ComplexHeatmap`, `tidyverse`, `vegan`, `ape`, `VennDiagram`, and the project's custom plotting theme.
 
-### Step 4: Set Up renv (Reproducible R Environment)
+### Step 4: Restore R Package Versions (renv)
 
-The project uses [`renv`](https://rstudio.github.io/renv/) to lock R package versions. To restore the exact package versions used:
+This project uses [`renv`](https://rstudio.github.io/renv/) to lock exact R package versions for reproducibility. The `renv.lock` file (included in the repository) records every package and its version. The `renv/` library directory itself is **not included in the repository** because it is generated locally.
+
+To recreate the exact R environment used in this analysis:
 
 ```bash
 conda activate microbiome-r
 cd LC_COPD_microbiome
-Rscript -e 'renv::restore()'
+
+# 1. Install renv if it is not already available
+Rscript --vanilla -e 'install.packages("renv", repos="https://cloud.r-project.org")'
+
+# 2. Restore all package versions recorded in renv.lock
+#    This will create a local renv/ folder and install all packages
+#    (CRAN + Bioconductor) with the exact versions used in the project
+Rscript --vanilla -e 'renv::restore()'
+```
+
+> **Note:** The first `renv::restore()` may take **15–30 minutes** because it downloads and installs all dependencies (including Bioconductor packages such as `phyloseq`, `ANCOMBC`, `ComplexHeatmap`, etc.).
+>
+> All packages are installed into a **project-local library (`renv/library/`)**, leaving your global R environment unchanged.
+
+If `renv::restore()` fails due to missing system libraries, you can fall back to manual installation:
+
+```bash
+Rscript scripts/install_r_packages.R
 ```
 
 ### Step 5: Place Raw Data
@@ -247,8 +266,12 @@ LC_COPD_microbiome/
 │   ├── r-microbiome-env.yml
 │   └── picrust2-env.yml
 ├── logs/                              # Pipeline execution logs
-├── renv/                              # R package version lock (renv)
-├── renv.lock                          # Exact R package versions
+├── renv.lock                          # Exact R package versions (tracked)
+├── .Rprofile                          # Auto-activates renv on R startup
+├── renv/                              # (auto-generated, not in repo)
+│   ├── activate.R                     # renv bootstrap script (tracked)
+│   ├── settings.json                  # renv config (tracked)
+│   └── library/                       # Installed packages (auto-generated, not in repo)
 ├── LC_COPD_microbiome.Rproj           # RStudio project file
 └── README.md                          # This file
 ```
@@ -647,10 +670,46 @@ All pipeline parameters are centrally defined in `scripts/config.sh`. Key parame
 ### Full Reproducibility Checklist
 
 1. **Random seed**: Set to `42` throughout all scripts (bash and R)
-2. **R packages**: Exact versions locked via `renv.lock` — restore with `renv::restore()`
+2. **R packages**: Exact versions locked via `renv.lock` (R 4.5.2, Bioconductor 3.22) — see [Step 4](#step-4-restore-r-package-versions-renv) for restore instructions
 3. **Conda environments**: Exported in `envs/*.yml`
 4. **Parameters**: All in `scripts/config.sh` (no hard-coded values in individual scripts)
 5. **Logs**: Execution logs in `logs/` directory with timestamps
+
+### Restoring the R Environment from GitHub
+
+When you clone this repository, the `renv/library/` folder will **not** be present (it is gitignored). To recreate the exact R environment:
+
+```bash
+conda activate microbiome-r
+cd LC_COPD_microbiome
+
+# Install renv (if needed)
+Rscript -e 'install.packages("renv")'
+
+# Restore all packages from the lockfile
+# This reads renv.lock and installs every package at the exact recorded version
+Rscript -e 'renv::restore()'
+```
+
+If you encounter issues (e.g., compilation errors on certain platforms), you can install packages manually:
+
+```r
+# In R, within the project directory:
+install.packages("BiocManager")
+BiocManager::install(version = "3.22")
+
+# Install key Bioconductor packages
+BiocManager::install(c(
+  "phyloseq", "ANCOMBC", "microbiomeMarker",
+  "ComplexHeatmap", "Biostrings"
+), ask = FALSE)
+
+# Install CRAN packages
+install.packages(c(
+  "tidyverse", "vegan", "ape", "VennDiagram",
+  "ggrepel", "patchwork", "pheatmap", "RColorBrewer"
+))
+```
 
 ### Export Environment for Reproducibility
 
