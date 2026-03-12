@@ -81,8 +81,18 @@ This pipeline performs end-to-end 16S rRNA microbiome analysis from raw Illumina
 | Resource | Minimum | Recommended |
 |----------|---------|-------------|
 | CPU | 4 cores | 6+ cores |
-| RAM | 8 GB | 11+ GB |
+| RAM | 8 GB | 11+ GB (with swap enabled) |
+| Swap | 8 GB | 16+ GB |
 | Storage | 30 GB | 50+ GB free |
+
+> **WSL users:** This pipeline was developed on WSL with **11 GB RAM** and **28 GB swap** allocated. DADA2 denoising and PICRUSt2 are the most memory-intensive steps. If running under WSL, ensure adequate RAM and swap are configured in your `.wslconfig` file:
+> ```ini
+> # %UserProfile%\.wslconfig
+> [wsl2]
+> memory=11GB
+> swap=28GB
+> processors=6
+> ```
 
 ### Software
 
