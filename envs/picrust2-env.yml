@@ -1,0 +1,16 @@
+# PICRUSt2 Environment
+# Installation: conda env create -f picrust2-env.yml
+# Note: Using bioconda's recommended channel priority (no defaults)
+
+name: picrust2
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - python=3.8
+  - picrust2=2.5.2
+  - numpy<2.0
+  - biom-format
+  - h5py
+  - joblib
+  - pytest

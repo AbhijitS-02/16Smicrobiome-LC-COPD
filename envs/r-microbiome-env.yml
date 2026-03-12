@@ -1,0 +1,53 @@
+# R Microbiome Analysis Environment
+# Installation: conda env create -f r-microbiome-env.yml
+
+name: microbiome-r
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - r-base>=4.3
+  - r-tidyverse
+  - r-ggplot2
+  - r-dplyr
+  - r-tidyr
+  - r-readr
+  - r-stringr
+  - r-forcats
+  - r-purrr
+  - r-tibble
+  # Visualization
+  - r-patchwork
+  - r-ggpubr
+  - r-ggsignif
+  - r-scales
+  - r-viridis
+  - r-rcolorbrewer
+  - r-pheatmap
+  - r-ggrepel
+  - r-cowplot
+  - r-gridextra
+  # Statistics
+  - r-vegan
+  - r-ape
+  - r-permute
+  # File handling
+  - r-yaml
+  - r-jsonlite
+  # Bioconductor packages (install via R after env creation)
+  - bioconductor-phyloseq
+  - bioconductor-microbiome
+  - bioconductor-deseq2
+  - bioconductor-complexheatmap
+  - bioconductor-biocparallel
+  # Additional tools
+  - r-remotes
+  - r-devtools
+  - r-knitr
+  - r-rmarkdown
+  # Note: The following packages need to be installed via R:
+  # - ANCOMBC (BiocManager::install("ANCOMBC"))
+  # - qiime2R (devtools::install_github("jbisanz/qiime2R"))
+  # - microViz (remotes::install_github("david-barnett/microViz"))
+  # - ALDEx2 (BiocManager::install("ALDEx2"))
