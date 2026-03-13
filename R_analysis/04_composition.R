@@ -1,8 +1,8 @@
-#===============================================================================
+# ===============================================================================
 # 04_COMPOSITION.R - Taxonomic Composition Analysis
-#===============================================================================
+# ===============================================================================
 # Relative abundance plots, heatmaps, and core microbiome analysis
-#===============================================================================
+# ===============================================================================
 
 suppressPackageStartupMessages({
   library(phyloseq)
@@ -93,11 +93,13 @@ df_phylum$Sample <- factor(df_phylum$Sample, levels = phylum_sample_order)
 # Plot
 phylum_plot <- ggplot(df_phylum, aes(x = Sample, y = Abundance, fill = Phylum)) +
   geom_bar(stat = "identity", width = 0.95) +
-  facet_grid(~ group, scales = "free_x", space = "free_x") +
+  facet_grid(~group, scales = "free_x", space = "free_x") +
   scale_fill_manual(values = phylum_colors) +
   scale_y_continuous(expand = expansion(mult = c(0.02, 0))) +
-  labs(x = "", y = "Relative Abundance (%)", 
-       title = "Phylum-Level Composition") +
+  labs(
+    x = "", y = "Relative Abundance (%)",
+    title = "Phylum-Level Composition"
+  ) +
   theme_publication() +
   theme(
     axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5, size = 7),
@@ -107,10 +109,14 @@ phylum_plot <- ggplot(df_phylum, aes(x = Sample, y = Abundance, fill = Phylum)) 
   ) +
   guides(fill = guide_legend(reverse = TRUE, ncol = 1))
 
-ggsave(file.path(output_dir, "barplot_phylum.pdf"), 
-       phylum_plot, width = 14, height = 6, dpi = 300)
-ggsave(file.path(output_dir, "barplot_phylum.png"), 
-       phylum_plot, width = 14, height = 6, dpi = 300)
+ggsave(file.path(output_dir, "barplot_phylum.pdf"),
+  phylum_plot,
+  width = 14, height = 6, dpi = 300
+)
+ggsave(file.path(output_dir, "barplot_phylum.png"),
+  phylum_plot,
+  width = 14, height = 6, dpi = 300
+)
 
 #-------------------------------------------------------------------------------
 # GENUS-LEVEL BARPLOT (TOP 30)
@@ -132,14 +138,18 @@ genus_tax_df <- as.data.frame(tax_table(ps_genus))
 resolved_genus <- ifelse(
   is.na(genus_tax_df$Genus),
   ifelse(!is.na(genus_tax_df$Family),
-         paste0("Uncl. ", genus_tax_df$Family),
-         ifelse(!is.na(genus_tax_df$Order),
-                paste0("Uncl. ", genus_tax_df$Order),
-                ifelse(!is.na(genus_tax_df$Class),
-                       paste0("Uncl. ", genus_tax_df$Class),
-                       ifelse(!is.na(genus_tax_df$Phylum),
-                              paste0("Uncl. ", genus_tax_df$Phylum),
-                              "Unclassified")))),
+    paste0("Uncl. ", genus_tax_df$Family),
+    ifelse(!is.na(genus_tax_df$Order),
+      paste0("Uncl. ", genus_tax_df$Order),
+      ifelse(!is.na(genus_tax_df$Class),
+        paste0("Uncl. ", genus_tax_df$Class),
+        ifelse(!is.na(genus_tax_df$Phylum),
+          paste0("Uncl. ", genus_tax_df$Phylum),
+          "Unclassified"
+        )
+      )
+    )
+  ),
   genus_tax_df$Genus
 )
 # Ensure uniqueness across ASVs that share the same resolved name
@@ -207,11 +217,13 @@ df_genus$Sample <- factor(df_genus$Sample, levels = genus_sample_order)
 # Plot
 genus_plot <- ggplot(df_genus, aes(x = Sample, y = Abundance, fill = Genus)) +
   geom_bar(stat = "identity", width = 0.95) +
-  facet_grid(~ group, scales = "free_x", space = "free_x") +
+  facet_grid(~group, scales = "free_x", space = "free_x") +
   scale_fill_manual(values = genus_colors) +
   scale_y_continuous(expand = expansion(mult = c(0.02, 0))) +
-  labs(x = "", y = "Relative Abundance (%)", 
-       title = "Genus-Level Composition (Top 30)") +
+  labs(
+    x = "", y = "Relative Abundance (%)",
+    title = "Genus-Level Composition (Top 30)"
+  ) +
   theme_publication() +
   theme(
     axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5, size = 7),
@@ -221,10 +233,14 @@ genus_plot <- ggplot(df_genus, aes(x = Sample, y = Abundance, fill = Genus)) +
   ) +
   guides(fill = guide_legend(reverse = TRUE, ncol = 1))
 
-ggsave(file.path(output_dir, "barplot_genus.pdf"), 
-       genus_plot, width = 14, height = 7, dpi = 300)
-ggsave(file.path(output_dir, "barplot_genus.png"), 
-       genus_plot, width = 14, height = 7, dpi = 300)
+ggsave(file.path(output_dir, "barplot_genus.pdf"),
+  genus_plot,
+  width = 14, height = 7, dpi = 300
+)
+ggsave(file.path(output_dir, "barplot_genus.png"),
+  genus_plot,
+  width = 14, height = 7, dpi = 300
+)
 
 #-------------------------------------------------------------------------------
 # MEAN ABUNDANCE BY GROUP (STACKED BAR)
@@ -239,14 +255,18 @@ phylum_means <- df_phylum %>%
 group_phylum_plot <- ggplot(phylum_means, aes(x = group, y = Mean_Abundance, fill = Phylum)) +
   geom_bar(stat = "identity", width = 0.7) +
   scale_fill_manual(values = phylum_colors) +
-  labs(x = "", y = "Mean Relative Abundance (%)",
-       title = "Phylum Composition by Group") +
+  labs(
+    x = "", y = "Mean Relative Abundance (%)",
+    title = "Phylum Composition by Group"
+  ) +
   theme_publication() +
   theme(legend.position = "right") +
   guides(fill = guide_legend(reverse = TRUE))
 
-ggsave(file.path(output_dir, "barplot_phylum_by_group.pdf"), 
-       group_phylum_plot, width = 8, height = 6, dpi = 300)
+ggsave(file.path(output_dir, "barplot_phylum_by_group.pdf"),
+  group_phylum_plot,
+  width = 8, height = 6, dpi = 300
+)
 
 #-------------------------------------------------------------------------------
 # HEATMAP (TOP 30 GENERA)
@@ -268,10 +288,12 @@ tax_top30 <- as.data.frame(tax_table(ps_top30))
 raw_genus_names <- ifelse(
   is.na(tax_top30$Genus),
   ifelse(!is.na(tax_top30$Family),
-         paste0("Uncl. ", tax_top30$Family),
-         ifelse(!is.na(tax_top30$Order),
-                paste0("Uncl. ", tax_top30$Order),
-                "Unclassified")),
+    paste0("Uncl. ", tax_top30$Family),
+    ifelse(!is.na(tax_top30$Order),
+      paste0("Uncl. ", tax_top30$Order),
+      "Unclassified"
+    )
+  ),
   tax_top30$Genus
 )
 # Force unique row names (e.g. "Uncl. Lachnospiraceae", "Uncl. Lachnospiraceae_1")
@@ -302,8 +324,9 @@ pheatmap(
 dev.off()
 
 # Save as PNG too
-png(file.path(output_dir, "heatmap_top30_genera.png"), 
-    width = 12, height = 10, units = "in", res = 300)
+png(file.path(output_dir, "heatmap_top30_genera.png"),
+  width = 12, height = 10, units = "in", res = 300
+)
 pheatmap(
   log10(abund_mat + 0.01),
   annotation_col = annotation_col,
@@ -323,56 +346,8 @@ dev.off()
 #-------------------------------------------------------------------------------
 cat("Analyzing core microbiome...\n")
 
-# Define core: present in >50% samples with >0.1% abundance
-core_taxa <- core_members(ps_rel, detection = 0.1, prevalence = 0.5)
-
-cat(sprintf("  Core taxa (>50%% prevalence, >0.1%% abundance): %d\n", length(core_taxa)))
-
-# Core by group
-core_by_group <- lapply(levels(samp_data$group), function(g) {
-  ps_group <- prune_samples(sample_data(ps_rel)$group == g, ps_rel)
-  core_members(ps_group, detection = 0.1, prevalence = 0.5)
-})
-names(core_by_group) <- levels(samp_data$group)
-
-cat("  Core taxa per group:\n")
-for (g in names(core_by_group)) {
-  cat(sprintf("    %s: %d taxa\n", g, length(core_by_group[[g]])))
-}
-
-# Create Venn diagram data
-venn_data <- list(
-  Control = core_by_group$Control,
-  LC_COPD = core_by_group$LC_COPD,
-  LC_woCOPD = core_by_group$LC_woCOPD
-)
-
-# If VennDiagram available, create plot
-if (requireNamespace("VennDiagram", quietly = TRUE)) {
-  library(VennDiagram)
-  
-  venn.diagram(
-    x = venn_data,
-    category.names = names(venn_data),
-    filename = file.path(output_dir, "core_microbiome_venn.png"),
-    output = TRUE,
-    imagetype = "png",
-    height = 2000,
-    width = 2000,
-    resolution = 300,
-    fill = unname(group_colors[names(venn_data)]),
-    alpha = 0.5,
-    cat.cex = 1.2,
-    cex = 1.5
-  )
-}
-
-# Save Venn diagram summary as a text file
-cat("  Saving Venn diagram summary...\n")
-venn_txt <- file.path(tables_dir, "core_microbiome_venn_summary.txt")
-tax_all <- as.data.frame(tax_table(ps))
-
 # Helper: resolve ASV IDs to readable taxonomy strings
+tax_all <- as.data.frame(tax_table(ps))
 resolve_taxonomy <- function(asv_ids, tax_df) {
   sapply(asv_ids, function(id) {
     row <- tax_df[id, ]
@@ -382,75 +357,158 @@ resolve_taxonomy <- function(asv_ids, tax_df) {
   })
 }
 
-sink(venn_txt)
-cat("================================================================\n")
-cat("Core Microbiome Venn Diagram Summary\n")
-cat("================================================================\n")
-cat(sprintf("Detection threshold: >0.1%% abundance\n"))
-cat(sprintf("Prevalence threshold: >50%% of samples\n\n"))
+# Helper: run complete core-microbiome workflow for a given prevalence
+run_core_analysis <- function(ps_rel, samp_data, prevalence, label, suffix,
+                              output_dir, tables_dir, tax_all) {
 
-# Per-group core taxa
-for (g in names(core_by_group)) {
-  taxa_ids <- core_by_group[[g]]
-  cat(sprintf("--- %s (%d core taxa) ---\n", g, length(taxa_ids)))
-  if (length(taxa_ids) > 0) {
-    tax_strings <- resolve_taxonomy(taxa_ids, tax_all)
-    for (i in seq_along(taxa_ids)) {
-      cat(sprintf("  %s : %s\n", taxa_ids[i], tax_strings[i]))
+  cat(sprintf("\n--- Core microbiome @ %s prevalence ---\n", label))
+
+  # Overall core taxa
+  core_taxa <- core_members(ps_rel, detection = 0.1, prevalence = prevalence)
+  cat(sprintf("  Core taxa (>%s prevalence, >0.1%% abundance): %d\n",
+              label, length(core_taxa)))
+
+  # Core by group
+  core_by_group <- lapply(levels(samp_data$group), function(g) {
+    ps_group <- prune_samples(sample_data(ps_rel)$group == g, ps_rel)
+    core_members(ps_group, detection = 0.1, prevalence = prevalence)
+  })
+  names(core_by_group) <- levels(samp_data$group)
+
+  cat("  Core taxa per group:\n")
+  for (g in names(core_by_group)) {
+    cat(sprintf("    %s: %d taxa\n", g, length(core_by_group[[g]])))
+  }
+
+  # Create Venn diagram data
+  venn_data <- list(
+    Control  = core_by_group$Control,
+    LC_COPD  = core_by_group$LC_COPD,
+    LC_woCOPD = core_by_group$LC_woCOPD
+  )
+
+  # Venn diagram
+  if (requireNamespace("VennDiagram", quietly = TRUE)) {
+    library(VennDiagram)
+    venn.diagram(
+      x = venn_data,
+      category.names = names(venn_data),
+      filename = file.path(output_dir,
+                           paste0("core_microbiome_venn_", suffix, ".png")),
+      output   = TRUE,
+      imagetype = "png",
+      height   = 2000,
+      width    = 2000,
+      resolution = 300,
+      fill  = unname(group_colors[names(venn_data)]),
+      alpha = 0.5,
+      cat.cex = 1.2,
+      cex     = 1.5
+    )
+  }
+
+  # Save Venn diagram summary as a text file
+  cat("  Saving Venn diagram summary...\n")
+  venn_txt <- file.path(tables_dir,
+                        paste0("core_microbiome_venn_summary_", suffix, ".txt"))
+
+  sink(venn_txt)
+  cat("================================================================\n")
+  cat(sprintf("Core Microbiome Venn Diagram Summary  (%s prevalence)\n", label))
+  cat("================================================================\n")
+  cat(sprintf("Detection threshold : >0.1%% abundance\n"))
+  cat(sprintf("Prevalence threshold: >%s of samples\n\n", label))
+
+  # Per-group core taxa
+  for (g in names(core_by_group)) {
+    taxa_ids <- core_by_group[[g]]
+    cat(sprintf("--- %s (%d core taxa) ---\n", g, length(taxa_ids)))
+    if (length(taxa_ids) > 0) {
+      tax_strings <- resolve_taxonomy(taxa_ids, tax_all)
+      for (i in seq_along(taxa_ids)) {
+        cat(sprintf("  %s : %s\n", taxa_ids[i], tax_strings[i]))
+      }
     }
+    cat("\n")
   }
-  cat("\n")
-}
 
-# Shared among ALL groups (center of Venn)
-shared_all <- Reduce(intersect, core_by_group)
-cat(sprintf("--- Shared across ALL groups (%d taxa) ---\n", length(shared_all)))
-if (length(shared_all) > 0) {
-  tax_strings <- resolve_taxonomy(shared_all, tax_all)
-  for (i in seq_along(shared_all)) {
-    cat(sprintf("  %s : %s\n", shared_all[i], tax_strings[i]))
-  }
-} else {
-  cat("  (none)\n")
-}
-cat("\n")
-
-# Pairwise shared
-group_names <- names(core_by_group)
-pairs <- combn(group_names, 2, simplify = FALSE)
-for (pair in pairs) {
-  shared <- intersect(core_by_group[[pair[1]]], core_by_group[[pair[2]]])
-  cat(sprintf("--- Shared: %s & %s (%d taxa) ---\n", pair[1], pair[2], length(shared)))
-  if (length(shared) > 0) {
-    tax_strings <- resolve_taxonomy(shared, tax_all)
-    for (i in seq_along(shared)) {
-      cat(sprintf("  %s : %s\n", shared[i], tax_strings[i]))
+  # Shared among ALL groups (center of Venn)
+  shared_all <- Reduce(intersect, core_by_group)
+  cat(sprintf("--- Shared across ALL groups (%d taxa) ---\n", length(shared_all)))
+  if (length(shared_all) > 0) {
+    tax_strings <- resolve_taxonomy(shared_all, tax_all)
+    for (i in seq_along(shared_all)) {
+      cat(sprintf("  %s : %s\n", shared_all[i], tax_strings[i]))
     }
   } else {
     cat("  (none)\n")
   }
   cat("\n")
-}
 
-# Unique to each group
-for (g in group_names) {
-  others <- setdiff(group_names, g)
-  unique_taxa <- setdiff(core_by_group[[g]], Reduce(union, core_by_group[others]))
-  cat(sprintf("--- Unique to %s (%d taxa) ---\n", g, length(unique_taxa)))
-  if (length(unique_taxa) > 0) {
-    tax_strings <- resolve_taxonomy(unique_taxa, tax_all)
-    for (i in seq_along(unique_taxa)) {
-      cat(sprintf("  %s : %s\n", unique_taxa[i], tax_strings[i]))
+  # Pairwise shared
+  group_names <- names(core_by_group)
+  pairs <- combn(group_names, 2, simplify = FALSE)
+  for (pair in pairs) {
+    shared <- intersect(core_by_group[[pair[1]]], core_by_group[[pair[2]]])
+    cat(sprintf("--- Shared: %s & %s (%d taxa) ---\n",
+                pair[1], pair[2], length(shared)))
+    if (length(shared) > 0) {
+      tax_strings <- resolve_taxonomy(shared, tax_all)
+      for (i in seq_along(shared)) {
+        cat(sprintf("  %s : %s\n", shared[i], tax_strings[i]))
+      }
+    } else {
+      cat("  (none)\n")
     }
-  } else {
-    cat("  (none)\n")
+    cat("\n")
   }
-  cat("\n")
+
+  # Unique to each group
+  for (g in group_names) {
+    others <- setdiff(group_names, g)
+    unique_taxa <- setdiff(core_by_group[[g]],
+                           Reduce(union, core_by_group[others]))
+    cat(sprintf("--- Unique to %s (%d taxa) ---\n", g, length(unique_taxa)))
+    if (length(unique_taxa) > 0) {
+      tax_strings <- resolve_taxonomy(unique_taxa, tax_all)
+      for (i in seq_along(unique_taxa)) {
+        cat(sprintf("  %s : %s\n", unique_taxa[i], tax_strings[i]))
+      }
+    } else {
+      cat("  (none)\n")
+    }
+    cat("\n")
+  }
+
+  cat("================================================================\n")
+  sink()
+  cat(sprintf("  Saved: %s\n", venn_txt))
+
+  # Return core_taxa for downstream use (CSV export)
+  return(core_taxa)
 }
 
-cat("================================================================\n")
-sink()
-cat(sprintf("  Saved: %s\n", venn_txt))
+# --- Run for 50% prevalence ---
+core_taxa_50 <- run_core_analysis(
+  ps_rel, samp_data,
+  prevalence  = 0.5,
+  label       = "50%",
+  suffix      = "50pct",
+  output_dir  = output_dir,
+  tables_dir  = tables_dir,
+  tax_all     = tax_all
+)
+
+# --- Run for 80% prevalence ---
+core_taxa_80 <- run_core_analysis(
+  ps_rel, samp_data,
+  prevalence  = 0.8,
+  label       = "80%",
+  suffix      = "80pct",
+  output_dir  = output_dir,
+  tables_dir  = tables_dir,
+  tax_all     = tax_all
+)
 
 #-------------------------------------------------------------------------------
 # PREVALENCE-ABUNDANCE PLOT
@@ -476,13 +534,17 @@ prev_abund_plot <- ggplot(prev_abund_df, aes(x = Prevalence, y = Abundance, colo
   scale_y_log10() +
   scale_color_manual(values = colorRampPalette(brewer.pal(12, "Set3"))(
     length(unique(prev_abund_df$Phylum)))) +
-  labs(x = "Prevalence (%)", y = "Mean Relative Abundance (%, log scale)",
-       title = "Prevalence vs Abundance") +
+  labs(
+    x = "Prevalence (%)", y = "Mean Relative Abundance (%, log scale)",
+    title = "Prevalence vs Abundance"
+  ) +
   theme_publication() +
   theme(legend.position = "right")
 
-ggsave(file.path(output_dir, "prevalence_abundance.pdf"), 
-       prev_abund_plot, width = 10, height = 7, dpi = 300)
+ggsave(file.path(output_dir, "prevalence_abundance.pdf"),
+  prev_abund_plot,
+  width = 10, height = 7, dpi = 300
+)
 
 #-------------------------------------------------------------------------------
 # SAVE RESULTS
@@ -492,21 +554,31 @@ cat("\nSaving composition tables...\n")
 # Save phylum-level table
 phylum_table <- df_phylum %>%
   pivot_wider(names_from = Sample, values_from = Abundance, values_fill = 0)
-write.csv(phylum_table, file.path(tables_dir, "composition_phylum.csv"), 
-          row.names = FALSE)
+write.csv(phylum_table, file.path(tables_dir, "composition_phylum.csv"),
+  row.names = FALSE
+)
 
 # Save genus-level table
 genus_table <- df_genus %>%
   pivot_wider(names_from = Sample, values_from = Abundance, values_fill = 0)
-write.csv(genus_table, file.path(tables_dir, "composition_genus.csv"), 
+write.csv(genus_table, file.path(tables_dir, "composition_genus.csv"),
+  row.names = FALSE
+)
+
+# Save core microbiome (50% prevalence)
+core_df_50 <- data.frame(
+  ASV = core_taxa_50,
+  Taxonomy = apply(tax_table(ps)[core_taxa_50, ], 1, paste, collapse = "; ")
+)
+write.csv(core_df_50, file.path(tables_dir, "core_microbiome_50pct.csv"),
           row.names = FALSE)
 
-# Save core microbiome
-core_df <- data.frame(
-  ASV = core_taxa,
-  Taxonomy = apply(tax_table(ps)[core_taxa, ], 1, paste, collapse = "; ")
+# Save core microbiome (80% prevalence)
+core_df_80 <- data.frame(
+  ASV = core_taxa_80,
+  Taxonomy = apply(tax_table(ps)[core_taxa_80, ], 1, paste, collapse = "; ")
 )
-write.csv(core_df, file.path(tables_dir, "core_microbiome.csv"), 
+write.csv(core_df_80, file.path(tables_dir, "core_microbiome_80pct.csv"),
           row.names = FALSE)
 
 cat("\n============================================\n")
