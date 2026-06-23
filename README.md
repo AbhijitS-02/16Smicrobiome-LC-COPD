@@ -6,7 +6,7 @@
 [![R Version](https://img.shields.io/badge/R-4.3%2B-blue)](https://cran.r-project.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A comprehensive, reproducible bioinformatics pipeline for 16S rRNA gene sequencing analysis of bronchoalveolar lavage fluid (BALF) microbiome, comparing three clinical groups: **healthy controls**, **lung cancer patients with COPD (LC_COPD)**, and **lung cancer patients without COPD (LC_woCOPD)**.
+A comprehensive, reproducible bioinformatics pipeline for 16S rRNA gene sequencing analysis of bronchoalveolar lavage fluid (BALF) microbiome, comparing three clinical groups: **benign lung mass controls**, **lung cancer patients with COPD (LC_COPD)**, and **lung cancer patients without COPD (LC_woCOPD)**.
 
 ---
 
@@ -510,75 +510,394 @@ Runs Linear discriminant analysis Effect Size (LEfSe) using the `microbiomeMarke
 | Mean non-chimeric reads/sample | 18,504 |
 | Mean retention rate | 39.7% |
 | DADA2 parameters | truncLen F=275, R=220; maxEE F=2, R=4 |
-| Total ASVs identified | Thousands (before filtering) |
+| Total ASVs identified | 6,409 (after prevalence filtering) |
 
 > **DADA2 parameter optimization**: A grid-search across 36 parameter combinations (truncLen_F: 260/270/280, truncLen_R: 210/220/230/240, maxEE: (2,2)/(2,3)/(3,2)/(3,3)) was performed. The selected parameters (F=275, R=220, maxEE F=2, R=4) balanced read retention (~40%) with sufficient overlap (≥20 bp) for the ~460 bp V3-V4 amplicon, while using slightly relaxed maxEE for reverse reads to account for their typically lower quality.
 
+#### Per-Sample DADA2 Processing
+
+| Sample | Input | Filtered | % Filtered | Merged | % Merged | Non-chimeric | % Retained |
+|--------|-------|----------|-----------|--------|----------|-------------|-----------|
+| C1 | 53,911 | 40,707 | 75.5% | 17,828 | 33.1% | 14,749 | 27.4% |
+| C2 | 48,355 | 35,965 | 74.4% | 26,469 | 54.7% | 18,081 | 37.4% |
+| C3 | 45,837 | 30,778 | 67.2% | 23,815 | 52.0% | 16,178 | 35.3% |
+| C4 | 39,542 | 22,507 | 56.9% | 17,048 | 43.1% | 9,175 | 23.2% |
+| C5 | 47,946 | 35,284 | 73.6% | 25,823 | 53.9% | 23,402 | 48.8% |
+| C6 | 46,571 | 35,009 | 75.2% | 23,659 | 50.8% | 19,847 | 42.6% |
+| C7 | 49,314 | 38,113 | 77.3% | 27,656 | 56.1% | 24,259 | 49.2% |
+| C8 | 46,931 | 36,149 | 77.0% | 24,982 | 53.2% | 22,872 | 48.7% |
+| C9 | 48,483 | 36,579 | 75.5% | 25,468 | 52.5% | 24,096 | 49.7% |
+| C10 | 47,928 | 36,297 | 75.7% | 24,927 | 52.0% | 23,101 | 48.2% |
+| LC1 | 48,161 | 36,333 | 75.4% | 25,107 | 52.1% | 18,904 | 39.3% |
+| LC2 | 46,594 | 36,170 | 77.6% | 27,500 | 59.0% | 21,379 | 45.9% |
+| LC3 | 46,248 | 35,333 | 76.4% | 24,070 | 52.1% | 14,068 | 30.4% |
+| LC4 | 47,680 | 35,305 | 74.1% | 25,542 | 53.6% | 17,969 | 37.7% |
+| LC5 | 41,669 | 22,693 | 54.5% | 15,863 | 38.1% | 14,445 | 34.7% |
+| LC6 | 46,164 | 33,120 | 71.7% | 24,983 | 54.1% | 18,465 | 40.0% |
+| LC7 | 47,027 | 35,715 | 76.0% | 24,525 | 52.2% | 19,211 | 40.9% |
+| LC8 | 47,110 | 35,769 | 75.9% | 25,785 | 54.7% | 20,617 | 43.8% |
+| LC9 | 48,256 | 37,377 | 77.5% | 27,785 | 57.6% | 23,744 | 49.2% |
+| LC10 | 40,644 | 23,360 | 57.5% | 17,065 | 42.0% | 12,853 | 31.6% |
+| LC11 | 44,914 | 29,912 | 66.6% | 20,921 | 46.6% | 15,964 | 35.5% |
+| LC12 | 46,633 | 35,636 | 76.4% | 25,608 | 54.9% | 16,539 | 35.5% |
+| LC13 | 48,419 | 37,299 | 77.0% | 26,695 | 55.1% | 18,874 | 39.0% |
+| LC14 | 48,349 | 37,067 | 76.7% | 28,527 | 59.0% | 21,193 | 43.8% |
+| LC15 | 47,402 | 35,972 | 75.9% | 26,027 | 54.9% | 20,739 | 43.8% |
+| LC16 | 45,767 | 31,246 | 68.3% | 21,746 | 47.5% | 16,789 | 36.7% |
+| LC17 | 41,402 | 23,943 | 57.8% | 17,322 | 41.8% | 15,742 | 38.0% |
+| LC18 | 46,278 | 34,053 | 73.6% | 23,571 | 50.9% | 19,778 | 42.7% |
+| LC19 | 46,254 | 34,604 | 74.8% | 24,913 | 53.9% | 17,449 | 37.7% |
+| LC20 | 45,999 | 34,574 | 75.2% | 23,977 | 52.1% | 18,326 | 39.8% |
+
+---
+
+### 16S rRNA Sequencing Summary
+
+The 16S rRNA gene sequencing (V3-V4 region) was used to assess the changes in the BALF microbiota between the Control, LC_COPD, and LC_woCOPD groups. A total of 1,395,788 high-quality raw reads were generated using the Illumina MiSeq platform. We obtained 558,808 clean reads (19,576.0, 18,165.5, and 18,139.3 average reads for Control, LC_COPD, and LC_woCOPD groups, respectively) after filtering and chimera removal using DADA2. A total of 6,409 ASVs were identified after prevalence filtering (>1% of samples). These 6,409 ASVs belonged to 584 different genera in 43 different phyla. Of these ASVs, 227 were shared among the three groups, and 1,796, 1,929, and 1,870 ASVs were specific to the Control, LC_COPD, and LC_woCOPD groups, respectively.
+
+#### Taxonomic Distribution
+
+| Rank | Unique Taxa |
+|------|------------|
+| Kingdom | 2 |
+| Phylum | 43 |
+| Class | 107 |
+| Order | 227 |
+| Family | 352 |
+| Genus | 584 |
+| Species | 508 |
+
+#### ASV Distribution Across Groups (Venn Diagram)
+
+| Venn Region | ASV Count |
+|-------------|-----------|
+| Shared (all 3 groups) | 227 |
+| Control & LC_COPD only | 298 |
+| Control & LC_woCOPD only | 59 |
+| LC_COPD & LC_woCOPD only | 230 |
+| Unique to Control | 1,796 |
+| Unique to LC_COPD | 1,929 |
+| Unique to LC_woCOPD | 1,870 |
+| **Total** | **6,409** |
+
+> **Figure**: `figures/composition/asv_venn_diagram.png`
+
 ### Sample Summary
 
-| Group | N | Mean Reads | SD | Mean ASVs | SD |
-|-------|---|-----------|-----|-----------|-----|
-| Control | 10 | 18,872 | 4,753 | 321 | 167 |
-| LC_COPD | 10 | 17,465 | 3,647 | 364 | 143 |
-| LC_woCOPD | 10 | 17,174 | 3,123 | 359 | 143 |
+| Group | N | Mean Reads | SD | Min Reads | Max Reads | Mean ASVs | SD |
+|-------|---|-----------|-----|-----------|-----------|-----------|-----|
+| Control | 10 | 18,872 | 4,753 | 9,160 | 24,150 | 321 | 167 |
+| LC_COPD | 10 | 17,466 | 3,647 | 12,617 | 23,536 | 364 | 143 |
+| LC_woCOPD | 10 | 17,175 | 3,123 | 10,217 | 20,891 | 360 | 143 |
+
+---
 
 ### Alpha Diversity
 
-All alpha diversity metrics showed **no statistically significant differences** (adjusted p > 0.05) across the three groups by Kruskal-Wallis test:
+All alpha diversity metrics (8 total) showed **no statistically significant differences** (BH-adjusted p > 0.05) across the three groups by Kruskal-Wallis test:
 
-| Metric | H statistic | p-value | Adjusted p | Significance |
-|--------|-------------|---------|------------|--------------|
-| Observed | 0.899 | 0.638 | 0.652 | ns |
-| Shannon | 3.440 | 0.179 | 0.579 | ns |
-| Simpson | 2.480 | 0.289 | 0.579 | ns |
-| Chao1 | 0.856 | 0.652 | 0.652 | ns |
-| Pielou | 2.766 | 0.251 | 0.579 | ns |
+| Metric | Category | H statistic | df | p-value | Adjusted p | Significance |
+|--------|----------|-------------|-----|---------|------------|--------------|
+| Observed | Richness | 0.903 | 2 | 0.637 | 0.651 | ns |
+| Chao1 | Richness | 0.859 | 2 | 0.651 | 0.651 | ns |
+| ACE | Richness | 0.947 | 2 | 0.623 | 0.651 | ns |
+| Shannon | Diversity | 3.440 | 2 | 0.179 | 0.579 | ns |
+| Simpson | Diversity | 2.480 | 2 | 0.289 | 0.579 | ns |
+| InvSimpson | Diversity | 2.480 | 2 | 0.289 | 0.579 | ns |
+| Fisher | Diversity | 1.025 | 2 | 0.599 | 0.651 | ns |
+| Pielou | Evenness | 2.766 | 2 | 0.251 | 0.579 | ns |
 
 > **Interpretation**: Similar species richness and evenness across groups suggests that overall community diversity is not globally altered in lung cancer patients. However, compositional differences may exist at the individual taxon or functional level (see below).
+>
+> **Figures**: `figures/alpha_diversity/alpha_diversity_main.png`, `figures/alpha_diversity/rarefaction_curves.png`
 
-### Beta Diversity (PERMANOVA)
+---
 
-Community composition differed significantly between groups for multiple distance metrics (999 permutations):
+### Beta Diversity
 
-| Distance Metric | R² | F | p-value | Adj. p |
-|------------------|----|---|---------|--------|
-| **Bray-Curtis** | 0.132 | 2.050 | 0.021 | **0.042** |
-| **Jaccard** | 0.089 | 1.319 | 0.001 | **0.004** |
-| Weighted UniFrac | 0.139 | 2.187 | 0.054 | 0.054 |
-| **Unweighted UniFrac** | 0.083 | 1.229 | 0.033 | **0.044** |
+#### PERMANOVA (Overall – `adonis2`, 999 permutations)
 
-PERMDISP tests confirmed **homogeneous dispersion** (p > 0.05 for all metrics), validating PERMANOVA results.
+Community composition differed significantly between groups for multiple distance metrics:
 
-**Pairwise comparisons** (Bray-Curtis):
-- Control vs LC_woCOPD: R² = 0.126, **p = 0.045** ✓
-- LC_COPD vs LC_woCOPD: R² = 0.100, **p = 0.045** ✓
-- Control vs LC_COPD: R² = 0.081, p = 0.122 (ns)
+| Distance Metric | Df | Sum of Squares | R² | F | p-value | BH-adj. p | Significant? |
+|-----------------|-----|---------------|-----|---|---------|-----------|-------------|
+| **Bray-Curtis** | 2 | 0.742 | 0.132 | 2.050 | 0.021 | **0.042** | ✅ Yes |
+| **Jaccard** | 2 | 1.128 | 0.089 | 1.319 | 0.001 | **0.004** | ✅ Yes |
+| Weighted UniFrac | 2 | 0.125 | 0.141 | 2.214 | 0.058 | 0.058 | ❌ No (marginal) |
+| **Unweighted UniFrac** | 2 | 0.684 | 0.083 | 1.225 | 0.032 | **0.043** | ✅ Yes |
 
-> **Interpretation**: The LC_woCOPD group shows the most distinct microbiome composition, differing significantly from both Control and LC_COPD groups.
+> **Interpretation**: Community composition differs significantly by Bray-Curtis (abundance-weighted), Jaccard (presence/absence), and Unweighted UniFrac (phylogeny-aware presence/absence). Weighted UniFrac is borderline (p = 0.058), suggesting the dominant phylogenetic lineages are relatively conserved across groups. Effect sizes (R² = 8–14%) are modest but typical for human microbiome studies with small sample sizes.
+
+#### PERMDISP (Beta Dispersion – `betadisper` + `permutest`, 999 permutations)
+
+| Distance Metric | F | p-value | Significant? |
+|-----------------|---|---------|-------------|
+| Bray-Curtis | 0.172 | 0.857 | ❌ No |
+| Jaccard | 1.044 | 0.366 | ❌ No |
+| Weighted UniFrac | 1.840 | 0.187 | ❌ No |
+| Unweighted UniFrac | 0.089 | 0.922 | ❌ No |
+
+> **Interpretation**: All PERMDISP tests are non-significant (all p > 0.18), confirming that within-group dispersions are homogeneous across all three groups. This validates that the significant PERMANOVA results reflect genuine differences in community centroids (compositional location), not artifacts of unequal group heterogeneity.
+
+#### Pairwise PERMANOVA (All Distance Metrics)
+
+| Comparison | Distance | R² | F | Raw p | BH-adj. p | Sig? |
+|------------|----------|-----|---|-------|-----------|------|
+| Control vs LC_COPD | Bray-Curtis | 0.081 | 1.580 | 0.122 | 0.122 | ❌ |
+| **Control vs LC_woCOPD** | **Bray-Curtis** | **0.126** | **2.588** | **0.021** | **0.045** | ✅ |
+| **LC_COPD vs LC_woCOPD** | **Bray-Curtis** | **0.100** | **2.008** | **0.030** | **0.045** | ✅ |
+| Control vs LC_COPD | Jaccard | 0.058 | 1.112 | 0.135 | 0.135 | ❌ |
+| **Control vs LC_woCOPD** | **Jaccard** | **0.077** | **1.507** | **0.002** | **0.005** | ✅ |
+| **LC_COPD vs LC_woCOPD** | **Jaccard** | **0.069** | **1.344** | **0.003** | **0.005** | ✅ |
+| Control vs LC_COPD | Weighted UniFrac | 0.100 | 1.999 | 0.097 | 0.146 | ❌ |
+| Control vs LC_woCOPD | Weighted UniFrac | 0.133 | 2.750 | 0.054 | 0.146 | ❌ |
+| LC_COPD vs LC_woCOPD | Weighted UniFrac | 0.089 | 1.761 | 0.151 | 0.151 | ❌ |
+| Control vs LC_COPD | Unweighted UniFrac | 0.060 | 1.154 | 0.166 | 0.249 | ❌ |
+| **Control vs LC_woCOPD** | **Unweighted UniFrac** | **0.074** | **1.440** | **0.015** | **0.045** | ✅ |
+| LC_COPD vs LC_woCOPD | Unweighted UniFrac | 0.057 | 1.083 | 0.252 | 0.252 | ❌ |
+
+> **Key finding**: The **LC_woCOPD (lung cancer without COPD)** group is consistently the most compositionally distinct, separating significantly from both Control and LC_COPD by Bray-Curtis and Jaccard, and from Control by Unweighted UniFrac. The Control vs LC_COPD comparison is never significant after correction, meaning the COPD-comorbid lung cancer group resembles healthy controls more than the LC-only group. Weighted UniFrac shows no significant pairwise differences, reinforcing that dominant phylogenetic lineages are conserved.
+
+#### NMDS Ordination
+
+- **Method**: Non-Metric Multidimensional Scaling on Bray-Curtis distances
+- **Stress value**: 0.154 (adequate, < 0.2)
+- **Convergence**: Best solution found and repeated after 39 iterations (trymax = 100)
+
+> **Figures**: `figures/beta_diversity/beta_diversity_pcoa_combined.png`, `figures/beta_diversity/nmds_bray_curtis.png`, `figures/beta_diversity/distance_comparison_boxplot.pdf`
+
+---
 
 ### Differential Abundance (ANCOM-BC2)
 
-Three genera showed significant differential abundance (q-value < 0.05):
+ANCOM-BC2 was applied at the genus level (55 genera tested after prevalence/abundance filtering from 177 genera input) with bias correction. Reference group: Control.
 
-| Genus | Phylum | LC_COPD vs Control | LC_woCOPD vs Control |
-|-------|--------|-------------------|---------------------|
-| ***Neisseria*** | Proteobacteria | **↑ LFC=2.76** (q=0.007) | LFC=1.28 (ns) |
-| ***Cetobacterium*** | Fusobacteriota | LFC=1.71 (ns) | **↑ LFC=1.92** (q=0.027) |
-| ***Gemella*** | Firmicutes | LFC=1.08 (ns) | **↑ LFC=1.82** (q=0.035) |
+#### Significant Taxa (q-value < 0.05)
 
-With relaxed p-value filtering (p < 0.05), additional differentially abundant taxa were identified including *Streptococcus*, *Alloprevotella*, *Leptotrichia*, *Corynebacterium*, and the Rikenellaceae RC9 gut group.
+| Genus | Phylum | Family | LC_COPD vs Control (LFC ± SE) | q-value | LC_woCOPD vs Control (LFC ± SE) | q-value |
+|-------|--------|--------|-------------------------------|---------|--------------------------------|---------|
+| ***Neisseria*** | Proteobacteria | Neisseriaceae | **↑ 2.76 ± 0.59** | **0.007** | ↑ 1.28 ± 0.65 | 0.236 |
+| ***Cetobacterium*** | Fusobacteriota | Fusobacteriaceae | ↑ 1.71 ± 0.46 | 0.055 | **↑ 1.92 ± 0.43** | **0.027** |
+| ***Gemella*** | Firmicutes | Gemellaceae | ↑ 1.08 ± 0.44 | 0.235 | **↑ 1.82 ± 0.48** | **0.035** |
+
+#### Additional Differentially Abundant Taxa (p-value < 0.05)
+
+With relaxed filtering using raw p-values, **7 taxa** were differentially abundant in LC_COPD vs Control and **9 taxa** in LC_woCOPD vs Control:
+
+| Genus | Phylum | LC_COPD vs Control | p-value | LC_woCOPD vs Control | p-value |
+|-------|--------|-------------------|---------|---------------------|---------|
+| *Neisseria* | Proteobacteria | ↑ LFC = 2.37 | **0.002** | — | ns |
+| *Cetobacterium* | Fusobacteriota | ↑ LFC = 1.71 | **0.002** | ↑ LFC = 1.92 | **< 0.001** |
+| *Unclassified Prevotellaceae* | Bacteroidota | ↓ LFC = −1.16 | **0.004** | — | ns |
+| *Oribacterium* | Firmicutes | ↓ LFC = −0.97 | **0.020** | — | ns |
+| *Gemella* | Firmicutes | ↑ LFC = 1.06 | **0.023** | ↑ LFC = 1.82 | **< 0.001** |
+| *Streptococcus* | Firmicutes | ↑ LFC = 1.61 | **0.027** | ↑ LFC = 1.70 | 0.014 |
+| *Unclassified Comamonadaceae* | Proteobacteria | ↓ LFC = −0.87 | **0.027** | — | ns |
+| *Corynebacterium* | Actinobacteriota | — | ns | ↑ LFC = 1.23 | **0.036** |
+| *Leptotrichia* | Fusobacteriota | — | ns | ↑ LFC = 1.47 | **0.009** |
+| *Prevotellaceae UCG-001* | Bacteroidota | — | ns | ↑ LFC = 0.99 | **0.018** |
+| *Rikenellaceae RC9 gut group* | Bacteroidota | — | ns | ↓ LFC = −0.96 | **0.021** |
+| *Unclassified Micrococcaceae* | Actinobacteriota | — | ns | ↓ LFC = −1.49 | **0.006** |
+| *Unclassified Enterobacteriaceae* | Proteobacteria | — | ns | ↓ LFC = −0.87 | **0.060** |
+
+> **Figures**: `figures/differential_abundance/pval_filtered/volcano_plots_combined.png`, `figures/differential_abundance/pval_filtered/lfc_barplots_combined.png`, `figures/differential_abundance/pval_filtered/heatmap_significant_taxa.pdf`, `figures/differential_abundance/qval_filtered/volcano_plots_combined.png`, `figures/differential_abundance/qval_filtered/lfc_barplots_combined.png`
+
+---
+
+### LEfSe Biomarker Analysis
+
+Linear discriminant analysis Effect Size (LEfSe) identified genus-level biomarkers distinguishing the three clinical groups (LDA score > 2.0, p < 0.05). A total of **71 significant biomarkers** were identified across three pairwise comparisons.
+
+#### LC_COPD vs Control (25 biomarkers)
+
+**Higher in LC_COPD (16 taxa):**
+
+| Genus | Phylum | LDA Score | p-value |
+|-------|--------|-----------|---------|
+| *Streptococcus* | Firmicutes | 4.97 | 0.019 |
+| *Neisseria* | Proteobacteria | 4.64 | 0.010 |
+| *Cetobacterium* | Fusobacteriota | 4.06 | 0.001 |
+| *Gemella* | Firmicutes | 3.62 | 0.007 |
+| *Capnocytophaga* | Bacteroidota | 3.31 | 0.005 |
+| *Peptostreptococcus* | Firmicutes | 3.27 | 0.022 |
+| *Aggregatibacter* | Proteobacteria | 3.22 | 0.031 |
+| *Anaerobacillus* | Firmicutes | 3.08 | 0.013 |
+| *Bacteroides* | Bacteroidota | 3.01 | 0.017 |
+| *ZOR0006* | Firmicutes | 2.84 | 0.008 |
+| *Desulfobulbus* | Desulfobacterota | 2.61 | 0.017 |
+| *Dongia* | Proteobacteria | 2.04 | 0.041 |
+| *Oleiagrimonas* | Proteobacteria | 2.03 | 0.031 |
+
+**Higher in Control (9 taxa):**
+
+| Genus | Phylum | LDA Score | p-value |
+|-------|--------|-----------|---------|
+| *Turicibacter* | Firmicutes | 2.58 | 0.026 |
+| *Brevundimonas* | Proteobacteria | 2.54 | 0.024 |
+| *Candidatus Saccharimonas* | Patescibacteria | 2.47 | 0.031 |
+| *[Eubacterium] coprostanoligenes group* | Firmicutes | 2.14 | 0.013 |
+
+#### LC_woCOPD vs Control (26 biomarkers)
+
+**Higher in LC_woCOPD/LC (13 taxa):**
+
+| Genus | Phylum | LDA Score | p-value |
+|-------|--------|-----------|---------|
+| *Alloprevotella* | Bacteroidota | 4.80 | 0.034 |
+| *Streptococcus* | Firmicutes | 4.55 | 0.041 |
+| *Corynebacterium* | Actinobacteriota | 4.01 | 0.016 |
+| *Cetobacterium* | Fusobacteriota | 3.95 | 0.026 |
+| *Gemella* | Firmicutes | 3.82 | < 0.001 |
+| *Granulicatella* | Firmicutes | 3.41 | 0.004 |
+| *Dolosigranulum* | Firmicutes | 3.29 | 0.005 |
+| *Aggregatibacter* | Proteobacteria | 3.28 | 0.013 |
+| *Streptobacillus* | Fusobacteriota | 3.19 | 0.005 |
+
+**Higher in Control (13 taxa):**
+
+| Genus | Phylum | LDA Score | p-value |
+|-------|--------|-----------|---------|
+| *Rikenellaceae RC9 gut group* | Bacteroidota | 2.88 | 0.006 |
+| *Proteus* | Proteobacteria | 2.60 | 0.047 |
+| *Solobacterium* | Firmicutes | 2.44 | 0.020 |
+| *Desulfovibrio* | Desulfobacterota | 2.14 | 0.025 |
+| *Mycobacterium* | Actinobacteriota | 2.11 | 0.036 |
+
+#### LC_COPD vs LC_woCOPD (20 biomarkers)
+
+**Higher in LC_COPD (11 taxa):**
+
+| Genus | Phylum | LDA Score | p-value |
+|-------|--------|-----------|---------|
+| *Clostridium sensu stricto 1* | Firmicutes | 4.13 | 0.031 |
+| *Capnocytophaga* | Bacteroidota | 3.23 | 0.018 |
+| *Rummeliibacillus* | Firmicutes | 3.21 | 0.013 |
+| *Anaerobacillus* | Firmicutes | 3.03 | 0.036 |
+| *Desulfovibrio* | Desulfobacterota | 2.54 | 0.025 |
+| *Abiotrophia* | Firmicutes | 2.46 | 0.031 |
+
+**Higher in LC_woCOPD (9 taxa):**
+
+| Genus | Phylum | LDA Score | p-value |
+|-------|--------|-----------|---------|
+| *Corynebacterium* | Actinobacteriota | 4.04 | 0.049 |
+| *Actinobacillus* | Proteobacteria | 3.64 | 0.031 |
+| *Granulicatella* | Firmicutes | 3.39 | 0.026 |
+| *Dolosigranulum* | Firmicutes | 3.32 | 0.013 |
+| *Streptobacillus* | Fusobacteriota | 3.23 | 0.005 |
+
+> **Figure**: `figures/lefse/combined/lefse_combined_lda_barplots.png`
+
+---
+
+### Core Microbiome
+
+#### Core Taxa at ≥50% Prevalence (>0.1% abundance)
+
+A total of **31 core ASVs** were identified across all samples at 50% prevalence threshold. The number of core taxa per group:
+
+| Group | Core Taxa Count |
+|-------|----------------|
+| Control | 21 |
+| LC_COPD | 31 |
+| LC_woCOPD | 37 |
+
+Key core genera include: *Prevotella* (3 ASVs), *Veillonella* (3 ASVs), *Streptococcus* (3 ASVs), *Bacillus* (2 ASVs), *Dickeya* (6 ASVs), *Collinsella* (2 ASVs), *Alloprevotella*, *Actinomyces*, *Cutibacterium*, and *Aerococcus*.
+
+#### Core Taxa at ≥80% Prevalence (>0.1% abundance)
+
+Only **6 highly conserved core ASVs** were present at 80% prevalence:
+
+| Core Taxon | Phylum | Family | Genus |
+|-----------|--------|--------|-------|
+| ASV 1 | Firmicutes | Veillonellaceae | *Veillonella* |
+| ASV 2 | Firmicutes | Streptococcaceae | *Streptococcus* |
+| ASV 3 | Firmicutes | Bacillaceae | *Bacillus* |
+| ASV 4 | Firmicutes | Bacillaceae | *Bacillus* |
+| ASV 5 | Proteobacteria | Enterobacterales (unclassified) | — |
+| ASV 6 | Proteobacteria | Enterobacterales (unclassified) | — |
+
+The core taxa per group at 80%: Control = 3, LC_COPD = 7, LC_woCOPD = 11.
+
+> **Figures**: `figures/composition/core_microbiome_venn_50pct.png`, `figures/composition/core_microbiome_venn_80pct.png`
+
+---
 
 ### Functional Predictions (PICRUSt2)
 
-PICRUSt2 analysis predicted **48 MetaCyc pathways**, **654 KOs**, and **179 ECs** with nominally significant differences (p < 0.05), though none survived FDR correction. Top pathways included:
+#### PERMANOVA on Functional Profiles
 
-| Pathway | Description | Trend |
-|---------|-------------|-------|
-| GLYCOCAT-PWY | Glycogen degradation I | ↑ in LC groups |
-| P441-PWY | N-acetylneuraminate degradation | ↑ in LC_COPD |
-| PWY-5913 | TCA cycle VI | ↑ in LC groups |
-| FASYN-ELONG-PWY | Fatty acid elongation (saturated) | ↓ in LC groups |
-| PWY-6471 | Peptidoglycan biosynthesis IV | ↑ in LC_COPD |
+PERMANOVA was performed on Bray-Curtis distances of predicted functional profiles. **No significant overall community-level differences** were observed for any functional category:
+
+| Functional Category | Df | R² | F | p-value | Significant? |
+|--------------------|-----|-----|---|---------|-------------|
+| MetaCyc Pathways (422 pathways) | 2 | 0.102 | 1.536 | 0.174 | ❌ No |
+| KEGG Orthologs (7,487 KOs) | 2 | 0.085 | 1.261 | 0.269 | ❌ No |
+| Enzyme Commission (2,253 ECs) | 2 | 0.092 | 1.365 | 0.229 | ❌ No |
+
+#### Differentially Abundant Features (Kruskal-Wallis, p < 0.05)
+
+Individual feature-level testing identified nominally significant differences, though **none survived FDR correction**:
+
+| Category | Features Tested | Significant (p < 0.05) | Significant (q < 0.05) |
+|----------|----------------|----------------------|----------------------|
+| MetaCyc Pathways | 422 | 48 | 0 |
+| KEGG Orthologs | 7,487 | 653 | 0 |
+| Enzyme Commission | 2,253 | 178 | 0 |
+
+#### Top Significant MetaCyc Pathways (p < 0.05)
+
+| Pathway | Description | Control (mean) | LC_COPD (mean) | LC_woCOPD (mean) | p-value | Trend |
+|---------|-------------|---------------|----------------|-----------------|---------|-------|
+| GLYCOCAT-PWY | Glycogen degradation I (bacterial) | 0.336 | 0.399 | 0.441 | 0.003 | ↑ in LC groups |
+| P441-PWY | N-acetylneuraminate degradation | 0.273 | 0.388 | 0.357 | 0.004 | ↑ in LC_COPD |
+| PPGPPMET-PWY | ppGpp biosynthesis | 0.108 | 0.172 | 0.128 | 0.006 | ↑ in LC_COPD |
+| PWY-5913 | TCA cycle VI (obligate autotrophs) | 0.238 | 0.331 | 0.328 | 0.007 | ↑ in LC groups |
+| P101-PWY | Ectoine biosynthesis | 0.004 | 0.010 | 0.004 | 0.010 | ↑ in LC_COPD |
+| PWY-5910 | Geranylgeranyldiphosphate biosynthesis I | 0.044 | 0.121 | 0.090 | 0.011 | ↑ in LC groups |
+| PWY-922 | Mevalonate pathway I | 0.032 | 0.094 | 0.067 | 0.011 | ↑ in LC groups |
+| P164-PWY | Purine nucleobases degradation I (anaerobic) | 0.144 | 0.210 | 0.245 | 0.011 | ↑ in LC groups |
+| FASYN-ELONG-PWY | Fatty acid elongation (saturated) | 0.627 | 0.599 | 0.575 | 0.012 | ↓ in LC groups |
+| PWY-6471 | Peptidoglycan biosynthesis IV (*E. faecium*) | 0.127 | 0.286 | 0.217 | 0.012 | ↑ in LC_COPD |
+| PWY-7228 | Guanosine nucleotides de novo biosynthesis I | 0.507 | 0.532 | 0.538 | 0.014 | ↑ in LC groups |
+| P23-PWY | Reductive TCA cycle I | 0.293 | 0.369 | 0.360 | 0.015 | ↑ in LC groups |
+| LACTOSECAT-PWY | Lactose and galactose degradation I | 0.037 | 0.102 | 0.066 | 0.024 | ↑ in LC_COPD |
+| GLCMANNANAUT-PWY | N-acetylglucosamine/-mannosamine/-neuraminate degradation | 0.130 | 0.212 | 0.182 | 0.025 | ↑ in LC groups |
+| PWY0-1061 | L-alanine biosynthesis | 0.291 | 0.395 | 0.329 | 0.040 | ↑ in LC_COPD |
+
+> **Figures**: `figures/functional/pathway_pca.png`, `figures/functional/significant_pathways_barplot.png`, `figures/functional/pathway_heatmap_top30.pdf`, `figures/functional/ko_pca.png`, `figures/functional/significant_ko_barplot.png`, `figures/functional/ec_pca.png`, `figures/functional/significant_ec_barplot.png`, `figures/functional/log2fc_heatmap_all3_top10_significance.png`
+
+---
+
+### Summary of All Generated Figures
+
+#### Publication-Quality Figures (`figures/publication/`)
+
+| Figure | Description | Formats |
+|--------|-------------|---------|
+| `Figure1_alpha_diversity` | Alpha diversity boxplots (Observed, Shannon, Simpson, Pielou) with Kruskal-Wallis statistics | PDF, PNG, TIFF |
+| `Figure2_beta_diversity` | Combined PCoA ordination (4 metrics) with PERMANOVA annotations and 95% confidence ellipses | PDF, PNG, TIFF |
+| `Figure3_composition` | Phylum-level stacked barplot by group | PDF, PNG, TIFF |
+| `Figure4_differential_abundance` | ANCOM-BC2 log-fold change barplots for significant taxa | PDF, PNG, TIFF |
+| `Figure5_functional_pathways` | PICRUSt2 pathway PCA + top significant pathway barplots | PDF, PNG, TIFF |
+| `FigureS1_rarefaction` | Rarefaction curves for all 30 samples | PDF, PNG |
+| `FigureS2_volcano_plots` | Volcano plots for all ANCOM-BC2 pairwise comparisons | PDF, PNG, TIFF |
+| `FigureS3a_genus_heatmap` | Top genus-level abundance heatmap (ComplexHeatmap) | PDF, PNG |
+| `FigureS3b_core_venn` | Core microbiome Venn diagram (shared/unique taxa) | PNG |
+| `FigureS4_ko_ec_barplots` | Significant KO & EC barplots from PICRUSt2 | PDF, PNG, TIFF |
+| `Table1_sample_summary` | Sample group summary statistics | CSV |
+
+#### Individual Analysis Figures
+
+| Directory | Contents |
+|-----------|----------|
+| `figures/alpha_diversity/` | Main boxplots, supplementary metrics, violin plots, rarefaction curves |
+| `figures/beta_diversity/` | Individual PCoA plots (4 metrics), combined PCoA panel, NMDS (Bray-Curtis), distance comparison boxplot |
+| `figures/composition/` | Phylum barplots (per sample + per group), genus barplots, top-20 and top-30 genus heatmaps, prevalence-abundance scatter, core microbiome Venn diagrams (50% and 80%), ASV Venn diagram |
+| `figures/differential_abundance/pval_filtered/` | Volcano plots (5 comparisons + combined), LFC barplots (5 + combined), waterfall plots (5), significance heatmap |
+| `figures/differential_abundance/qval_filtered/` | Volcano plots (3 comparisons + combined), LFC barplots (3 + combined), waterfall plots (3), significance heatmap |
+| `figures/functional/` | PCA ordinations (pathway, KO, EC), annotated PCAs, top-30 heatmaps, significant feature barplots, log2FC heatmaps (magnitude and significance ranking) |
+| `figures/lefse/` | LDA score barplots for each pairwise comparison and combined panel |
 
 ---
 
@@ -846,6 +1165,6 @@ If you use this pipeline or its outputs, please cite the following tools:
 For questions, issues, or contributions, please [open an issue](../../issues) on this repository.
 
 ---
-*Results will be updated after publication |* 
+
 *Pipeline last updated: 2026-03-12*
 *QIIME2 version: 2024.10 | R version: 4.3+ | DADA2 parameters optimized via grid-search*
