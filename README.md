@@ -674,31 +674,117 @@ ANCOM-BC2 was applied at the genus level (55 genera tested after prevalence/abun
 
 #### Significant Taxa (q-value < 0.05)
 
+Three genera passed strict FDR correction (q < 0.05):
+
 | Genus | Phylum | Family | LC_COPD vs Control (LFC ± SE) | q-value | LC_woCOPD vs Control (LFC ± SE) | q-value |
 |-------|--------|--------|-------------------------------|---------|--------------------------------|---------|
 | ***Neisseria*** | Proteobacteria | Neisseriaceae | **↑ 2.76 ± 0.59** | **0.007** | ↑ 1.28 ± 0.65 | 0.236 |
 | ***Cetobacterium*** | Fusobacteriota | Fusobacteriaceae | ↑ 1.71 ± 0.46 | 0.055 | **↑ 1.92 ± 0.43** | **0.027** |
 | ***Gemella*** | Firmicutes | Gemellaceae | ↑ 1.08 ± 0.44 | 0.235 | **↑ 1.82 ± 0.48** | **0.035** |
 
-#### Additional Differentially Abundant Taxa (p-value < 0.05)
+#### LC_COPD vs Control — Differentially Abundant Taxa (p < 0.05)
 
-With relaxed filtering using raw p-values, **7 taxa** were differentially abundant in LC_COPD vs Control and **9 taxa** in LC_woCOPD vs Control:
+**32 taxa** were differentially abundant by raw p-value between LC_COPD and Control:
 
-| Genus | Phylum | LC_COPD vs Control | p-value | LC_woCOPD vs Control | p-value |
-|-------|--------|-------------------|---------|---------------------|---------|
-| *Neisseria* | Proteobacteria | ↑ LFC = 2.37 | **0.002** | — | ns |
-| *Cetobacterium* | Fusobacteriota | ↑ LFC = 1.71 | **0.002** | ↑ LFC = 1.92 | **< 0.001** |
-| *Unclassified Prevotellaceae* | Bacteroidota | ↓ LFC = −1.16 | **0.004** | — | ns |
-| *Oribacterium* | Firmicutes | ↓ LFC = −0.97 | **0.020** | — | ns |
-| *Gemella* | Firmicutes | ↑ LFC = 1.06 | **0.023** | ↑ LFC = 1.82 | **< 0.001** |
-| *Streptococcus* | Firmicutes | ↑ LFC = 1.61 | **0.027** | ↑ LFC = 1.70 | 0.014 |
-| *Unclassified Comamonadaceae* | Proteobacteria | ↓ LFC = −0.87 | **0.027** | — | ns |
-| *Corynebacterium* | Actinobacteriota | — | ns | ↑ LFC = 1.23 | **0.036** |
-| *Leptotrichia* | Fusobacteriota | — | ns | ↑ LFC = 1.47 | **0.009** |
-| *Prevotellaceae UCG-001* | Bacteroidota | — | ns | ↑ LFC = 0.99 | **0.018** |
-| *Rikenellaceae RC9 gut group* | Bacteroidota | — | ns | ↓ LFC = −0.96 | **0.021** |
-| *Unclassified Micrococcaceae* | Actinobacteriota | — | ns | ↓ LFC = −1.49 | **0.006** |
-| *Unclassified Enterobacteriaceae* | Proteobacteria | — | ns | ↓ LFC = −0.87 | **0.060** |
+| Genus | Phylum | Family | LFC | SE | p-value | Direction |
+|-------|--------|--------|-----|-----|---------|-----------|
+| *Cetobacterium* | Fusobacteriota | Fusobacteriaceae | 2.025 | 0.332 | **< 0.001** | ↑ LC_COPD |
+| *Capnocytophaga* | Bacteroidota | Flavobacteriaceae | 1.783 | 0.382 | **< 0.001** | ↑ LC_COPD |
+| *Parvimonas* | Firmicutes | Peptostreptococcales-Tissierellales | −1.913 | 0.330 | **< 0.001** | ↓ LC_COPD |
+| Unclassified (Firmicutes) | Firmicutes | — | −1.597 | 0.309 | **< 0.001** | ↓ LC_COPD |
+| *Gemella* | Firmicutes | Gemellaceae | 1.669 | 0.383 | **0.001** | ↑ LC_COPD |
+| *Bacteroides* | Bacteroidota | Bacteroidaceae | 1.204 | 0.330 | **0.003** | ↑ LC_COPD |
+| *Neisseria* | Proteobacteria | Neisseriaceae | 2.456 | 0.729 | **0.004** | ↑ LC_COPD |
+| Unclassified (Actinobacteriota) | Actinobacteriota | — | 1.315 | 0.310 | **0.004** | ↑ LC_COPD |
+| Unclassified Eubacteriaceae | Firmicutes | Eubacteriaceae | 1.242 | 0.365 | **0.006** | ↑ LC_COPD |
+| Unclassified Erysipelotrichaceae | Firmicutes | Erysipelotrichaceae | 1.260 | 0.363 | **0.006** | ↑ LC_COPD |
+| *Peptostreptococcus* | Firmicutes | Peptostreptococcaceae | 1.164 | 0.329 | **0.006** | ↑ LC_COPD |
+| *Rothia* | Actinobacteriota | Micrococcaceae | 1.734 | 0.545 | **0.007** | ↑ LC_COPD |
+| *Enterococcus* | Firmicutes | Enterococcaceae | 1.488 | 0.290 | **0.007** | ↑ LC_COPD |
+| *Catonella* | Firmicutes | Lachnospiraceae | −1.020 | 0.271 | **0.007** | ↓ LC_COPD |
+| *Streptococcus* | Firmicutes | Streptococcaceae | 1.855 | 0.651 | **0.011** | ↑ LC_COPD |
+| *SBR1031* | Chloroflexi | SBR1031 | −0.778 | 0.245 | **0.013** | ↓ LC_COPD |
+| *Leptotrichia* | Fusobacteriota | Leptotrichiaceae | 1.260 | 0.453 | **0.015** | ↑ LC_COPD |
+| *Deinococcus* | Deinococcota | Deinococcaceae | −0.966 | 0.272 | **0.016** | ↓ LC_COPD |
+| uncultured (Atopobiaceae) | Actinobacteriota | Atopobiaceae | 0.886 | 0.225 | **0.017** | ↑ LC_COPD |
+| *Sphaerochaeta* | Spirochaetota | Spirochaetaceae | 1.076 | 0.275 | **0.017** | ↑ LC_COPD |
+| Unclassified Micrococcaceae | Actinobacteriota | Micrococcaceae | 0.847 | 0.283 | **0.020** | ↑ LC_COPD |
+| *Clostridium sensu stricto 1* | Firmicutes | Clostridiaceae | 1.440 | 0.568 | **0.023** | ↑ LC_COPD |
+| Unclassified Bacillaceae | Firmicutes | Bacillaceae | 1.075 | 0.383 | **0.023** | ↑ LC_COPD |
+| *OM190* | Planctomycetota | OM190 | 0.706 | 0.234 | **0.023** | ↑ LC_COPD |
+| *Abiotrophia* | Firmicutes | Aerococcaceae | 0.798 | 0.254 | **0.026** | ↑ LC_COPD |
+| Unclassified Peptostreptococcales-Tissierellales | Firmicutes | Peptostreptococcales-Tissierellales | 0.994 | 0.366 | **0.035** | ↑ LC_COPD |
+| *Candidatus Udaeobacter* | Verrucomicrobiota | Chthoniobacteraceae | 0.678 | 0.238 | **0.036** | ↑ LC_COPD |
+| *DSSD61* | Proteobacteria | Nitrosomonadaceae | 0.852 | 0.375 | **0.037** | ↑ LC_COPD |
+| Unclassified (Actinobacteriota) | Actinobacteriota | — | 0.717 | 0.240 | **0.040** | ↑ LC_COPD |
+| uncultured (Prevotellaceae) | Bacteroidota | Prevotellaceae | 0.888 | 0.304 | **0.043** | ↑ LC_COPD |
+| *Rikenellaceae RC9 gut group* | Bacteroidota | Rikenellaceae | −0.683 | 0.309 | **0.043** | ↓ LC_COPD |
+| *Actinomyces* | Actinobacteriota | Actinomycetaceae | 1.145 | 0.532 | **0.049** | ↑ LC_COPD |
+
+**Summary**: 25 taxa ↑ and 7 taxa ↓ in LC_COPD relative to Control. Enriched genera include oral-associated taxa (*Streptococcus*, *Neisseria*, *Gemella*, *Rothia*, *Capnocytophaga*, *Peptostreptococcus*).
+
+#### LC_woCOPD vs Control — Differentially Abundant Taxa (p < 0.05)
+
+**28 taxa** were differentially abundant by raw p-value between LC_woCOPD and Control:
+
+| Genus | Phylum | Family | LFC | SE | p-value | Direction |
+|-------|--------|--------|-----|-----|---------|-----------|
+| *Gemella* | Firmicutes | Gemellaceae | 1.949 | 0.426 | **< 0.001** | ↑ LC_woCOPD |
+| Unclassified Erysipelotrichaceae | Firmicutes | Erysipelotrichaceae | 1.555 | 0.275 | **< 0.001** | ↑ LC_woCOPD |
+| *Rikenellaceae RC9 gut group* | Bacteroidota | Rikenellaceae | −1.360 | 0.324 | **0.001** | ↓ LC_woCOPD |
+| *Alcaligenes* | Proteobacteria | Alcaligenaceae | −1.184 | 0.253 | **0.002** | ↓ LC_woCOPD |
+| Unclassified (Firmicutes) | Firmicutes | — | −1.472 | 0.344 | **0.003** | ↓ LC_woCOPD |
+| *Proteus* | Proteobacteria | Morganellaceae | −1.081 | 0.256 | **0.004** | ↓ LC_woCOPD |
+| *Candidatus Saccharimonas* | Patescibacteria | Saccharimonadaceae | −1.319 | 0.273 | **0.005** | ↓ LC_woCOPD |
+| Unclassified Lachnospiraceae | Firmicutes | Lachnospiraceae | −1.161 | 0.347 | **0.005** | ↓ LC_woCOPD |
+| *Deinococcus* | Deinococcota | Deinococcaceae | −1.087 | 0.240 | **0.006** | ↓ LC_woCOPD |
+| *Methylobacterium-Methylorubrum* | Proteobacteria | Beijerinckiaceae | −1.000 | 0.263 | **0.007** | ↓ LC_woCOPD |
+| *Enhydrobacter* | Proteobacteria | Moraxellaceae | −0.919 | 0.232 | **0.007** | ↓ LC_woCOPD |
+| *Clostridia UCG-014* | Firmicutes | Clostridia UCG-014 | −1.140 | 0.292 | **0.008** | ↓ LC_woCOPD |
+| *Enterococcus* | Firmicutes | Enterococcaceae | 1.110 | 0.308 | **0.009** | ↑ LC_woCOPD |
+| *Streptococcus* | Firmicutes | Streptococcaceae | 1.473 | 0.522 | **0.011** | ↑ LC_woCOPD |
+| *Pedomicrobium* | Proteobacteria | Hyphomicrobiaceae | −0.761 | 0.246 | **0.013** | ↓ LC_woCOPD |
+| uncultured (Caulobacteraceae) | Proteobacteria | Caulobacteraceae | −0.837 | 0.308 | **0.015** | ↓ LC_woCOPD |
+| *UCG-005* | Firmicutes | Oscillospiraceae | −0.727 | 0.235 | **0.017** | ↓ LC_woCOPD |
+| *Haemophilus* | Proteobacteria | Pasteurellaceae | 1.416 | 0.476 | **0.018** | ↑ LC_woCOPD |
+| *Alloprevotella* | Bacteroidota | Prevotellaceae | 1.695 | 0.660 | **0.019** | ↑ LC_woCOPD |
+| *Cetobacterium* | Fusobacteriota | Fusobacteriaceae | 1.346 | 0.465 | **0.020** | ↑ LC_woCOPD |
+| Unclassified (Firmicutes) | Firmicutes | — | 0.836 | 0.283 | **0.021** | ↑ LC_woCOPD |
+| *Solobacterium* | Firmicutes | Erysipelotrichaceae | −0.664 | 0.248 | **0.022** | ↓ LC_woCOPD |
+| *Slackia* | Actinobacteriota | Eggerthellaceae | −0.709 | 0.248 | **0.024** | ↓ LC_woCOPD |
+| *Allobaculum* | Firmicutes | Erysipelotrichaceae | −0.823 | 0.236 | **0.025** | ↓ LC_woCOPD |
+| *RF39* | Firmicutes | RF39 | −0.813 | 0.241 | **0.028** | ↓ LC_woCOPD |
+| *Fimbriimonadaceae* | Armatimonadota | Fimbriimonadaceae | −0.626 | 0.250 | **0.037** | ↓ LC_woCOPD |
+| *[Ruminococcus] gauvreauii group* | Firmicutes | Lachnospiraceae | −0.582 | 0.242 | **0.040** | ↓ LC_woCOPD |
+| *Vicinamibacteraceae* | Acidobacteriota | Vicinamibacteraceae | −0.587 | 0.246 | **0.049** | ↓ LC_woCOPD |
+
+**Summary**: 8 taxa ↑ and 20 taxa ↓ in LC_woCOPD relative to Control. The LC_woCOPD group shows predominantly decreased taxa, with notable depletion of environmentally-associated genera (*Deinococcus*, *Methylobacterium-Methylorubrum*, *Pedomicrobium*) and enrichment of oral/respiratory-associated genera (*Gemella*, *Streptococcus*, *Haemophilus*, *Alloprevotella*).
+
+#### LC_COPD vs LC_woCOPD — Differentially Abundant Taxa (p < 0.05)
+
+**17 taxa** were differentially abundant by raw p-value between LC_COPD and LC_woCOPD:
+
+| Genus | Phylum | Family | LFC | SE | p-value | Direction |
+|-------|--------|--------|-----|-----|---------|-----------|
+| *Parvimonas* | Firmicutes | Peptostreptococcales-Tissierellales | −2.460 | 0.398 | **< 0.001** | ↓ LC_COPD |
+| *Sphingomonas* | Proteobacteria | Sphingomonadaceae | −1.372 | 0.279 | **0.003** | ↓ LC_COPD |
+| *Corynebacterium* | Actinobacteriota | Corynebacteriaceae | −1.954 | 0.617 | **0.005** | ↓ LC_COPD |
+| *Capnocytophaga* | Bacteroidota | Flavobacteriaceae | 1.481 | 0.451 | **0.006** | ↑ LC_COPD |
+| *Clostridium sensu stricto 1* | Firmicutes | Clostridiaceae | 1.653 | 0.498 | **0.007** | ↑ LC_COPD |
+| Unclassified (Firmicutes) | Firmicutes | — | −0.972 | 0.294 | **0.008** | ↓ LC_COPD |
+| *Granulicatella* | Firmicutes | Carnobacteriaceae | −0.912 | 0.305 | **0.009** | ↓ LC_COPD |
+| *Actinobacillus* | Proteobacteria | Pasteurellaceae | −0.822 | 0.278 | **0.013** | ↓ LC_COPD |
+| Unclassified Peptostreptococcales-Tissierellales | Firmicutes | Peptostreptococcales-Tissierellales | 1.374 | 0.407 | **0.015** | ↑ LC_COPD |
+| *Allobaculum* | Firmicutes | Erysipelotrichaceae | 1.003 | 0.250 | **0.016** | ↑ LC_COPD |
+| *Christensenellaceae R-7 group* | Firmicutes | Christensenellaceae | −0.652 | 0.230 | **0.020** | ↓ LC_COPD |
+| *SBR1031* | Chloroflexi | SBR1031 | −0.658 | 0.204 | **0.023** | ↓ LC_COPD |
+| Unclassified Lachnospiraceae | Firmicutes | Lachnospiraceae | 0.795 | 0.314 | **0.026** | ↑ LC_COPD |
+| *Haemophilus* | Proteobacteria | Pasteurellaceae | −1.138 | 0.447 | **0.032** | ↓ LC_COPD |
+| Unclassified Micrococcaceae | Actinobacteriota | Micrococcaceae | 0.769 | 0.277 | **0.032** | ↑ LC_COPD |
+| Unclassified Selenomonadaceae | Firmicutes | Selenomonadaceae | −0.705 | 0.303 | **0.035** | ↓ LC_COPD |
+| *Alloprevotella* | Bacteroidota | Prevotellaceae | −1.429 | 0.632 | **0.036** | ↓ LC_COPD |
+
+**Summary**: 6 taxa ↑ and 11 taxa ↓ in LC_COPD relative to LC_woCOPD. Key differences include *Corynebacterium* (↓ in COPD), *Capnocytophaga* (↑ in COPD), *Haemophilus* and *Alloprevotella* (↓ in COPD, ↑ in LC_woCOPD), and *Clostridium sensu stricto 1* (↑ in COPD).
 
 > **Figures**: `figures/differential_abundance/pval_filtered/volcano_plots_combined.png`, `figures/differential_abundance/pval_filtered/lfc_barplots_combined.png`, `figures/differential_abundance/pval_filtered/heatmap_significant_taxa.pdf`, `figures/differential_abundance/qval_filtered/volcano_plots_combined.png`, `figures/differential_abundance/qval_filtered/lfc_barplots_combined.png`
 
