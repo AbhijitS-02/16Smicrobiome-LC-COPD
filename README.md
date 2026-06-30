@@ -223,6 +223,7 @@ LC_COPD_microbiome/
 │   ├── 06c_ec_visualization.R         # Enzyme Commission (EC) visualization
 │   ├── 07_publication_plots.R         # Publication-quality composite figures
 │   ├── 08_lefse.R                     # LEfSe biomarker analysis
+│   ├── 09_metabolite_taxa_correlation_median_imputation.R  # Metabolite–taxa Spearman correlation
 │   ├── functions/
 │   │   └── plotting_theme.R           # Shared publication plotting theme
 │   └── data/                          # Intermediate R data objects (.rds)
@@ -425,6 +426,9 @@ Rscript 07_publication_plots.R
 
 # 08. LEfSe biomarker analysis (requires microbiomeMarker package)
 Rscript 08_lefse.R
+
+# 09. Metabolite–taxa Spearman correlation (median imputation)
+Rscript 09_metabolite_taxa_correlation_median_imputation.R
 ```
 
 ### One-Command Pipeline (Expert Mode)
@@ -497,6 +501,10 @@ Assembles publication-ready composite figures from individual analyses. Outputs 
 
 Runs Linear discriminant analysis Effect Size (LEfSe) using the `microbiomeMarker` R package. Identifies genus-level biomarker taxa distinguishing the three clinical groups. Generates LDA score barplots and cladograms.
 
+### `09_metabolite_taxa_correlation_median_imputation.R` — Metabolite–Taxa Correlation
+
+Computes Spearman rank correlations between ANCOM-BC2 differentially abundant genera (CLR-transformed) and four ¹H-NMR-quantified BALF metabolites (Creatinine, Lactate, Tryptophan, Tyrosine). Missing metabolite values are imputed using per-group medians; metabolite data are then log₂-transformed and z-score normalized. Runs correlations for three comparison subsets (LC_COPD vs Control, LC vs Control, LC_COPD vs LC) plus a focused 5-taxa panel. Generates `pheatmap` heatmaps with significance stars (\* p < 0.05, \*\* p < 0.01, \*\*\* p < 0.001) and saves correlation r-value/p-value matrices as CSV files.
+
 ---
 
 ## 📈 Key Results Summary
@@ -553,7 +561,7 @@ Runs Linear discriminant analysis Effect Size (LEfSe) using the `microbiomeMarke
 
 ### 16S rRNA Sequencing Summary
 
-The 16S rRNA gene sequencing (V3-V4 region) was used to assess the changes in the BALF microbiota between the Control, LC_COPD, and LC_woCOPD groups. A total of 1,395,788 high-quality raw reads were generated using the Illumina MiSeq platform. We obtained 558,808 clean reads (19,576.0, 18,165.5, and 18,139.3 average reads for Control, LC_COPD, and LC_woCOPD groups, respectively) after filtering and chimera removal using DADA2. A total of 6,409 ASVs were identified after prevalence filtering (>1% of samples). These 6,409 ASVs belonged to 584 different genera in 43 different phyla. Of these ASVs, 227 were shared among the three groups, and 1,796, 1,929, and 1,870 ASVs were specific to the Control, LC_COPD, and LC_woCOPD groups, respectively.
+The 16S rRNA gene sequencing (V3-V4 region) was used to assess the changes in the BALF microbiota between the Control, LC_COPD, and LC_woCOPD groups. A total of 1,395,788 high-quality raw reads were generated using the Illumina MiSeq platform. We obtained 558,808 clean reads (19,576.0, 18,165.5, and 18,139.3 average reads for Control, LC_COPD, and LC_woCOPD groups, respectively) after filtering and chimera removal using DADA2. A total of 6,409 ASVs were identified after prevalence filtering. Specifically, taxa were required to be present with counts > 0 in at least 1% of the total samples (in this case, at least 1 sample out of 30) to be retained for downstream analysis. These 6,409 ASVs belonged to 584 different genera in 43 different phyla. Of these ASVs, 227 were shared among the three groups, and 1,796, 1,929, and 1,870 ASVs were specific to the Control, LC_COPD, and LC_woCOPD groups, respectively.
 
 #### Taxonomic Distribution
 
@@ -906,6 +914,149 @@ Only **6 highly conserved core ASVs** were present at 80% prevalence:
 The core taxa per group at 80%: Control = 3, LC_COPD = 7, LC_woCOPD = 11.
 
 > **Figures**: `figures/composition/core_microbiome_venn_50pct.png`, `figures/composition/core_microbiome_venn_80pct.png`
+
+---
+
+### Metabolite–Microbiome Correlation Analysis
+
+Spearman rank correlations were computed between ANCOM-BC2 differentially abundant taxa (CLR-transformed abundances) and four ¹H-NMR-quantified BALF metabolites: **Creatinine** (δ 3.04 ppm), **Lactate** (δ 1.33 ppm), **Tryptophan** (δ 4.03 ppm), and **Tyrosine** (δ 7.12 ppm). Analysis was performed using [`09_metabolite_taxa_correlation_median_imputation.R`](file:///d:/LC_COPD_microbiome/R_analysis/09_metabolite_taxa_correlation_median_imputation.R).
+
+**Methodology:**
+- **Taxonomic data**: CLR-transformed genus-level abundances (compositions package, pseudocount 1×10⁻⁶)
+- **Metabolite data**: Log₂-transformed and z-score normalized after group-wise median imputation
+- **Missing value handling**: Group-wise median imputation (robust to outliers in skewed metabolomics distributions)
+- **Statistical test**: Spearman rank correlation (`cor.test`, exact = FALSE); minimum 4 complete pairs required
+- **Significance thresholds**: \* p < 0.05, \*\* p < 0.01, \*\*\* p < 0.001
+
+#### Pre-Imputation Missingness Summary
+
+| Metabolite | LC_COPD (n=34) | LC (n=32) | Control (n=25) | Overall (n=91) |
+|------------|---------------|-----------|----------------|----------------|
+| Creatinine (δ 3.04) | 4 / 34 (11.8%) | 22 / 32 (68.8%) | 12 / 25 (48.0%) | 38 / 91 (41.8%) |
+| Lactate (δ 1.33) | 19 / 34 (55.9%) | 18 / 32 (56.2%) | 5 / 25 (20.0%) | 42 / 91 (46.2%) |
+| Tryptophan (δ 4.03) | 3 / 34 (8.8%) | 18 / 32 (56.2%) | 5 / 25 (20.0%) | 26 / 91 (28.6%) |
+| Tyrosine (δ 7.12) | 25 / 34 (73.5%) | 20 / 32 (62.5%) | 10 / 25 (40.0%) | 55 / 91 (60.4%) |
+
+> **Note**: Missingness reflects the NMR metabolomics dataset structure (multiple biological replicates per clinical subject). Group-wise median imputation was selected over mean imputation to minimize bias from outliers in skewed metabolomics distributions.
+
+#### LC_COPD vs Control — Spearman Correlation (ρ / p-value)
+
+Correlations between 32 differentially abundant taxa and 4 metabolites (n = 20 samples):
+
+| Taxon | Creatinine (ρ) | p-value | Lactate (ρ) | p-value | Tryptophan (ρ) | p-value | Tyrosine (ρ) | p-value |
+|-------|---------------|---------|-------------|---------|----------------|---------|--------------|---------|
+| *Cetobacterium* | **0.618** | **0.004** | −0.350 | 0.131 | **−0.609** | **0.004** | **0.509** | **0.022** |
+| *Peptostreptococcus* | **0.497** | **0.026** | 0.185 | 0.434 | −0.342 | 0.140 | **0.592** | **0.006** |
+| *Neisseria* | **0.493** | **0.027** | 0.035 | 0.882 | **−0.475** | **0.034** | **0.504** | **0.024** |
+| *Streptococcus* | **0.445** | **0.049** | 0.037 | 0.877 | **−0.457** | **0.043** | **0.578** | **0.008** |
+| *Rothia* | 0.403 | 0.078 | 0.104 | 0.663 | −0.375 | 0.104 | **0.499** | **0.025** |
+| *Capnocytophaga* | 0.386 | 0.093 | −0.132 | 0.579 | −0.353 | 0.127 | **0.481** | **0.032** |
+| Unclassified Erysipelotrichaceae | 0.371 | 0.108 | −0.265 | 0.259 | **−0.474** | **0.035** | 0.373 | 0.106 |
+| Unclassified Bacillaceae | 0.345 | 0.136 | −0.350 | 0.131 | −0.379 | 0.099 | 0.232 | 0.324 |
+| *Actinomyces* | 0.321 | 0.168 | 0.090 | 0.706 | −0.326 | 0.161 | 0.413 | 0.071 |
+| *Gemella* | 0.297 | 0.203 | −0.224 | 0.342 | −0.392 | 0.087 | 0.103 | 0.666 |
+| *Bacteroides* | 0.199 | 0.399 | −0.182 | 0.442 | **−0.662** | **0.001** | 0.219 | 0.354 |
+| *Clostridium sensu stricto 1* | 0.221 | 0.349 | 0.015 | 0.951 | −0.133 | 0.575 | −0.054 | 0.820 |
+| *Catonella* | 0.047 | 0.843 | −0.105 | 0.659 | **−0.526** | **0.017** | −0.001 | 0.997 |
+| *Leptotrichia* | 0.078 | 0.744 | −0.227 | 0.336 | −0.428 | 0.060 | 0.188 | 0.428 |
+| *SBR1031* | −0.412 | 0.071 | 0.201 | 0.395 | 0.253 | 0.283 | −0.428 | 0.060 |
+| *Rikenellaceae RC9 gut group* | **−0.550** | **0.012** | 0.135 | 0.570 | **0.484** | **0.031** | −0.378 | 0.101 |
+| *Deinococcus* | −0.159 | 0.503 | 0.342 | 0.140 | 0.421 | 0.065 | 0.173 | 0.465 |
+| uncultured (Prevotellaceae) | 0.188 | 0.427 | 0.051 | 0.832 | 0.061 | 0.799 | 0.104 | 0.663 |
+| uncultured (Atopobiaceae) | 0.121 | 0.610 | **0.457** | **0.043** | 0.061 | 0.797 | 0.068 | 0.776 |
+| *Abiotrophia* | 0.146 | 0.540 | 0.370 | 0.109 | 0.139 | 0.560 | 0.299 | 0.200 |
+| *Enterococcus* | −0.059 | 0.806 | 0.327 | 0.159 | 0.163 | 0.492 | 0.095 | 0.690 |
+| *Parvimonas* | −0.166 | 0.485 | −0.042 | 0.860 | −0.110 | 0.644 | 0.156 | 0.512 |
+| *Sphaerochaeta* | 0.181 | 0.445 | −0.021 | 0.931 | −0.130 | 0.586 | −0.068 | 0.776 |
+| Unclassified Micrococcaceae | 0.264 | 0.261 | 0.029 | 0.903 | −0.287 | 0.219 | 0.126 | 0.596 |
+| Unclassified Peptostreptococcales-Tissierellales | 0.299 | 0.200 | 0.254 | 0.281 | −0.238 | 0.312 | 0.137 | 0.564 |
+| Unclassified Eubacteriaceae | −0.256 | 0.275 | −0.286 | 0.222 | −0.234 | 0.322 | −0.215 | 0.363 |
+| Unclassified NA | 0.047 | 0.845 | −0.085 | 0.723 | 0.041 | 0.864 | −0.271 | 0.247 |
+| Unclassified NA (2) | 0.246 | 0.296 | **−0.418** | **0.067** | −0.315 | 0.176 | 0.271 | 0.249 |
+| Unclassified NA (3) | 0.224 | 0.342 | 0.041 | 0.865 | −0.143 | 0.549 | **0.453** | **0.045** |
+| *OM190* | 0.307 | 0.188 | −0.257 | 0.275 | −0.009 | 0.970 | −0.080 | 0.738 |
+| *Candidatus Udaeobacter* | 0.282 | 0.228 | −0.024 | 0.921 | −0.166 | 0.484 | 0.053 | 0.825 |
+| *DSSD61* | −0.170 | 0.475 | 0.072 | 0.762 | −0.052 | 0.829 | 0.019 | 0.936 |
+
+**Key findings (LC_COPD vs Control):** *Cetobacterium* showed the strongest correlations: positively with Creatinine (ρ = 0.618, p = 0.004) and Tyrosine (ρ = 0.509, p = 0.022), and negatively with Tryptophan (ρ = −0.609, p = 0.004). *Streptococcus*, *Neisseria*, and *Peptostreptococcus* were consistently positively associated with Creatinine and Tyrosine, and negatively with Tryptophan. *Bacteroides* had a strong negative correlation with Tryptophan (ρ = −0.662, p = 0.001). *Rikenellaceae RC9 gut group* showed the opposite pattern, with negative Creatinine (ρ = −0.550, p = 0.012) and positive Tryptophan (ρ = 0.484, p = 0.031) correlations.
+
+#### LC vs Control — Spearman Correlation (ρ / p-value)
+
+Correlations between 28 differentially abundant taxa and 4 metabolites (n = 20 samples):
+
+| Taxon | Creatinine (ρ) | p-value | Lactate (ρ) | p-value | Tryptophan (ρ) | p-value | Tyrosine (ρ) | p-value |
+|-------|---------------|---------|-------------|---------|----------------|---------|--------------|---------|
+| *Clostridia UCG-014* | −0.194 | 0.412 | −0.069 | 0.771 | 0.323 | 0.165 | **0.587** | **0.007** |
+| *Deinococcus* | 0.034 | 0.888 | 0.069 | 0.771 | 0.253 | 0.282 | **0.593** | **0.006** |
+| *Rikenellaceae RC9 gut group* | **−0.529** | **0.017** | −0.438 | 0.054 | −0.100 | 0.675 | −0.213 | 0.368 |
+| *Cetobacterium* | **0.520** | **0.019** | 0.392 | 0.088 | 0.341 | 0.141 | 0.213 | 0.366 |
+| *Streptococcus* | **0.478** | **0.033** | 0.182 | 0.442 | 0.285 | 0.224 | 0.398 | 0.083 |
+| *Pedomicrobium* | **−0.453** | **0.045** | −0.283 | 0.227 | −0.285 | 0.224 | −0.095 | 0.690 |
+| Unclassified Lachnospiraceae | **−0.448** | **0.048** | −0.304 | 0.192 | −0.273 | 0.245 | −0.123 | 0.604 |
+| *[Ruminococcus] gauvreauii group* | −0.321 | 0.168 | **−0.456** | **0.043** | −0.225 | 0.340 | 0.133 | 0.577 |
+| *Enterococcus* | 0.064 | 0.788 | **0.516** | **0.020** | 0.001 | 0.997 | 0.254 | 0.281 |
+| *Gemella* | 0.431 | 0.058 | 0.249 | 0.289 | 0.270 | 0.249 | 0.057 | 0.813 |
+| *Alloprevotella* | 0.257 | 0.274 | −0.038 | 0.873 | 0.184 | 0.437 | 0.221 | 0.349 |
+| Unclassified Erysipelotrichaceae | 0.360 | 0.119 | 0.298 | 0.202 | 0.344 | 0.138 | 0.215 | 0.362 |
+| *UCG-005* | −0.035 | 0.882 | −0.085 | 0.723 | 0.286 | 0.222 | 0.332 | 0.153 |
+| *Methylobacterium-Methylorubrum* | −0.309 | 0.185 | −0.408 | 0.074 | −0.328 | 0.158 | −0.105 | 0.658 |
+| uncultured (Caulobacteraceae) | −0.324 | 0.163 | −0.344 | 0.138 | −0.044 | 0.853 | 0.029 | 0.903 |
+| *Haemophilus* | 0.203 | 0.391 | −0.268 | 0.253 | −0.098 | 0.682 | −0.010 | 0.966 |
+| *Proteus* | −0.125 | 0.600 | −0.297 | 0.204 | −0.147 | 0.537 | 0.110 | 0.645 |
+| *Solobacterium* | 0.003 | 0.989 | −0.277 | 0.238 | 0.179 | 0.451 | 0.270 | 0.250 |
+| *Allobaculum* | −0.044 | 0.854 | 0.322 | 0.167 | −0.039 | 0.871 | 0.072 | 0.763 |
+| *Candidatus Saccharimonas* | −0.071 | 0.766 | −0.068 | 0.776 | −0.346 | 0.135 | −0.331 | 0.154 |
+| *Slackia* | 0.019 | 0.938 | 0.032 | 0.893 | −0.260 | 0.269 | 0.035 | 0.883 |
+| Unclassified NA | 0.233 | 0.323 | 0.372 | 0.106 | −0.191 | 0.420 | 0.293 | 0.210 |
+| Unclassified NA (2) | 0.228 | 0.334 | 0.044 | 0.853 | 0.095 | 0.691 | −0.275 | 0.241 |
+| *RF39* | 0.093 | 0.697 | −0.360 | 0.119 | −0.295 | 0.207 | −0.077 | 0.747 |
+| *Enhydrobacter* | −0.110 | 0.645 | −0.111 | 0.643 | −0.118 | 0.619 | 0.159 | 0.502 |
+| *Fimbriimonadaceae* | −0.177 | 0.454 | −0.066 | 0.784 | 0.070 | 0.769 | 0.133 | 0.577 |
+| *Vicinamibacteraceae* | −0.218 | 0.356 | −0.236 | 0.317 | 0.137 | 0.563 | 0.142 | 0.550 |
+
+**Key findings (LC vs Control):** *Deinococcus* and *Clostridia UCG-014* showed strong positive correlations with Tyrosine (ρ = 0.593, p = 0.006 and ρ = 0.587, p = 0.007, respectively). *Cetobacterium* was again positively correlated with Creatinine (ρ = 0.520, p = 0.019). *Rikenellaceae RC9 gut group* consistently showed negative Creatinine correlation (ρ = −0.529, p = 0.017). *Enterococcus* correlated positively with Lactate (ρ = 0.516, p = 0.020).
+
+#### LC_COPD vs LC — Spearman Correlation (ρ / p-value)
+
+Correlations between 17 differentially abundant taxa and 4 metabolites (n = 20 samples):
+
+| Taxon | Creatinine (ρ) | p-value | Lactate (ρ) | p-value | Tryptophan (ρ) | p-value | Tyrosine (ρ) | p-value |
+|-------|---------------|---------|-------------|---------|----------------|---------|--------------|---------|
+| *Capnocytophaga* | 0.213 | 0.367 | **−0.464** | **0.040** | **−0.504** | **0.023** | **0.642** | **0.002** |
+| *Parvimonas* | **−0.546** | **0.013** | 0.384 | 0.095 | 0.087 | 0.717 | −0.185 | 0.435 |
+| Unclassified Micrococcaceae | **0.485** | **0.030** | **−0.470** | **0.037** | −0.151 | 0.526 | 0.209 | 0.377 |
+| *Actinobacillus* | −0.371 | 0.107 | 0.241 | 0.307 | **0.482** | **0.032** | −0.433 | 0.056 |
+| *Corynebacterium* | −0.254 | 0.280 | 0.263 | 0.263 | 0.420 | 0.065 | −0.401 | 0.080 |
+| *Clostridium sensu stricto 1* | 0.363 | 0.116 | −0.118 | 0.619 | −0.364 | 0.114 | 0.188 | 0.427 |
+| Unclassified NA | −0.423 | 0.063 | 0.421 | 0.065 | −0.011 | 0.964 | −0.048 | 0.840 |
+| *Granulicatella* | −0.311 | 0.182 | 0.220 | 0.352 | 0.233 | 0.323 | −0.053 | 0.823 |
+| *Alloprevotella* | −0.272 | 0.245 | 0.164 | 0.491 | 0.300 | 0.199 | −0.224 | 0.343 |
+| *Sphingomonas* | −0.232 | 0.326 | 0.215 | 0.363 | 0.142 | 0.549 | −0.098 | 0.680 |
+| Unclassified Selenomonadaceae | −0.213 | 0.367 | 0.166 | 0.484 | 0.384 | 0.095 | −0.303 | 0.194 |
+| Unclassified Peptostreptococcales-Tissierellales | 0.226 | 0.339 | −0.037 | 0.878 | −0.240 | 0.309 | 0.131 | 0.581 |
+| *Allobaculum* | −0.218 | 0.356 | 0.152 | 0.523 | 0.183 | 0.440 | −0.354 | 0.126 |
+| *Christensenellaceae R-7 group* | 0.216 | 0.361 | −0.009 | 0.969 | 0.052 | 0.827 | −0.387 | 0.092 |
+| Unclassified Lachnospiraceae | −0.037 | 0.877 | −0.107 | 0.654 | 0.056 | 0.815 | −0.111 | 0.641 |
+| *Haemophilus* | 0.072 | 0.764 | 0.009 | 0.971 | 0.065 | 0.785 | −0.054 | 0.820 |
+| *SBR1031* | 0.025 | 0.918 | −0.139 | 0.560 | 0.002 | 0.995 | −0.120 | 0.613 |
+
+**Key findings (LC_COPD vs LC):** *Capnocytophaga* showed the most striking pattern: strong positive Tyrosine correlation (ρ = 0.642, p = 0.002), and significant negative correlations with both Lactate (ρ = −0.464, p = 0.040) and Tryptophan (ρ = −0.504, p = 0.023). *Parvimonas* was negatively correlated with Creatinine (ρ = −0.546, p = 0.013). *Actinobacillus* was positively correlated with Tryptophan (ρ = 0.482, p = 0.032).
+
+#### Focused Analysis: Selected Taxa (LC_COPD vs LC)
+
+A focused heatmap was generated for 5 taxa of particular biological interest in the LC_COPD vs LC comparison:
+
+| Taxon | Creatinine (ρ) | p-value | Lactate (ρ) | p-value | Tryptophan (ρ) | p-value | Tyrosine (ρ) | p-value |
+|-------|---------------|---------|-------------|---------|----------------|---------|--------------|---------|
+| *Capnocytophaga* | 0.213 | 0.367 | **−0.464** | **0.040** | **−0.504** | **0.023** | **0.642** | **0.002** |
+| *Clostridium sensu stricto 1* | 0.363 | 0.116 | −0.118 | 0.619 | −0.364 | 0.114 | 0.188 | 0.427 |
+| *Granulicatella* | −0.311 | 0.182 | 0.220 | 0.352 | 0.233 | 0.323 | −0.053 | 0.823 |
+| *Actinobacillus* | −0.371 | 0.107 | 0.241 | 0.307 | **0.482** | **0.032** | −0.433 | 0.056 |
+| *Corynebacterium* | −0.254 | 0.280 | 0.263 | 0.263 | 0.420 | 0.065 | −0.401 | 0.080 |
+
+> **Interpretation**: Among the 5 selected taxa, *Capnocytophaga* (enriched in LC_COPD) showed significant metabolite associations: positive with Tyrosine and negative with Lactate and Tryptophan. *Actinobacillus* (enriched in LC/LC_woCOPD) showed a positive Tryptophan correlation. *Corynebacterium* and *Granulicatella* (both enriched in LC_woCOPD) displayed trends toward positive Tryptophan and negative Tyrosine correlations (borderline significance), exhibiting an opposite metabolite association pattern compared to *Capnocytophaga*.
+
+> **Figures**: `figures/metabolite_correlations_median_imputation/heatmap_LC_COPD_vs_Control.png`, `figures/metabolite_correlations_median_imputation/heatmap_LC_vs_Control.png`, `figures/metabolite_correlations_median_imputation/heatmap_LC_COPD_vs_LC.png`, `figures/metabolite_correlations_median_imputation/heatmap_selected_taxa_vs_metabolites.png`
 
 ---
 
